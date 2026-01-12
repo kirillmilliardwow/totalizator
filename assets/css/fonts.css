@@ -1,0 +1,22 @@
+/* Шрифты для корпоративного стиля */
+
+@font-face {
+    font-family: 'Micron Sans';
+    src: url('../fonts/micron-sans.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Micron Sans';
+    src: url('../fonts/micron-sans-bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Технологические иконки */
+.icon-chip:before { content: "🟦"; }
+.icon-fab:before { content: "🏭"; }
+.icon-wafer:before { content: "⭕"; }
+.icon-transistor:before { content: "🔸"; }
+.icon-circuit:before { content: "🔌"; }
