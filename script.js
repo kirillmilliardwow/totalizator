@@ -1,562 +1,879 @@
+/**
+ * МИКРОН РАНДОМАЙЗЕР - Основная логика приложения
+ * В стиле ПАО "Микрон" для микроэлектроники
+ */
+
 // Конфигурация приложения
 const CONFIG = {
-    answers: [
-        { text: "ДА", emoji: "👍", message: "Вселенная говорит ДА! Действуйте смело!" },
-        { text: "НЕТ", emoji: "👎", message: "Лучше подождать. Сейчас не самое подходящее время." },
-        { text: "НАВЕРНОЕ", emoji: "🤔", message: "Возможно, но нужно больше информации." },
-        { text: "ОБЯЗАТЕЛЬНО", emoji: "🎯", message: "Это точно! Двигайтесь вперед без сомнений!" },
-        { text: "НИКАК", emoji: "🚫", message: "Лучше отказаться от этой идеи." },
-        { text: "СПРОСИ ПОЗЖЕ", emoji: "⏳", message: "Время покажет. Вернитесь к вопросу позже." },
-        { text: "ДАЖЕ НЕ ДУМАЙ", emoji: "🙅", message: "Категорически нет! Даже не рассматривайте этот вариант." },
-        { text: "ЗНАКИ ГОВОРЯТ ДА", emoji: "🔮", message: "Все знаки указывают на положительный ответ!" }
+    // Решения для микроэлектроники
+    decisions: [
+        {
+            id: 1,
+            text: "РЕКОМЕНДУЕТСЯ",
+            emoji: "✅",
+            category: "technology",
+            confidence: 85,
+            reasoning: "Анализ показывает высокую технологическую осуществимость и положительную экономическую эффективность. Проект соответствует стратегическим целям развития микроэлектроники.",
+            metrics: { efficiency: 85, profitability: 72, feasibility: 91 }
+        },
+        {
+            id: 2,
+            text: "ТРЕБУЕТ ДОРАБОТКИ",
+            emoji: "🔄",
+            category: "technology",
+            confidence: 60,
+            reasoning: "Проект имеет потенциал, но требует дополнительных исследований и оптимизации технологических параметров. Рекомендуется провести пилотные испытания.",
+            metrics: { efficiency: 60, profitability: 45, feasibility: 75 }
+        },
+        {
+            id: 3,
+            text: "ОТКЛОНИТЬ",
+            emoji: "❌",
+            category: "investment",
+            confidence: 90,
+            reasoning: "Технологические риски превышают допустимые пределы. Экономическая эффективность не соответствует требованиям. Рекомендуется рассмотреть альтернативные решения.",
+            metrics: { efficiency: 30, profitability: 25, feasibility: 40 }
+        },
+        {
+            id: 4,
+            text: "ИССЛЕДОВАТЬ ДАЛЬШЕ",
+            emoji: "🔍",
+            category: "research",
+            confidence: 50,
+            reasoning: "Недостаточно данных для принятия окончательного решения. Требуется дополнительный анализ рынка и технологических возможностей.",
+            metrics: { efficiency: 50, profitability: 50, feasibility: 50 }
+        },
+        {
+            id: 5,
+            text: "УСЛОВНО УТВЕРДИТЬ",
+            emoji: "⚠️",
+            category: "equipment",
+            confidence: 70,
+            reasoning: "Проект может быть реализован при выполнении определенных условий. Требуется дополнительное финансирование и кадровое обеспечение.",
+            metrics: { efficiency: 70, profitability: 65, feasibility: 75 }
+        }
     ],
-    wishes: [
-        "Пусть этот день принесет тебе столько радости, сколько звёзд на небе 🌟",
-        "Желаю, чтобы каждое твоё утро начиналось с улыбки и заканчивалось счастливыми воспоминаниями 🌅",
-        "Пусть удача станет твоей верной спутницей, а счастье — постоянным гостем 🍀",
-        "Желаю, чтобы все твои мечты находили дорогу к реальности, а реальность радовала, как мечта ✨",
-        "Пусть сердце будет легким, душа — светлой, а мысли — ясными, как горный ручей 💖",
-        "Желаю, чтобы сегодня ты получил именно тот знак, который ищешь 🔮",
-        "Пусть ветер перемен принесет только хорошие новости и приятные сюрпризы 🍃",
-        "Желаю, чтобы твой внутренний свет сиял так ярко, что освещал путь другим 💫",
-        "Пусть этот день будет наполнен музыкой смеха, гармонией спокойствия и ритмом счастья 🎶",
-        "Желаю, чтобы вселенная всегда была на твоей стороне 🌌"
+    
+    // Примеры вопросов для микроэлектроники
+    exampleQuestions: [
+        "Стоит ли инвестировать в новую линию фотолитографии?",
+        "Переходить на технологический узел 65нм в следующем квартале?",
+        "Разрабатывать собственный процессор для IoT устройств?",
+        "Закупать новое тестовое оборудование для чипов памяти?",
+        "Внедрять систему автоматического контроля качества?",
+        "Расширять производство силовых полупроводников?",
+        "Инвестировать в разработку чипов для автомобильной электроники?",
+        "Создавать совместное предприятие с зарубежным партнером?",
+        "Переходить на бессвинцовую пайку компонентов?",
+        "Внедрять систему цифрового двойника производства?"
     ],
-    historyKey: 'randomizer_history',
-    maxHistoryItems: 10
+    
+    // Технологические категории
+    categories: [
+        { id: "technology", name: "Технологии", icon: "fas fa-microchip", color: "#1e88e5" },
+        { id: "equipment", name: "Оборудование", icon: "fas fa-robot", color: "#43a047" },
+        { id: "materials", name: "Материалы", icon: "fas fa-atom", color: "#fb8c00" },
+        { id: "investment", name: "Инвестиции", icon: "fas fa-chart-line", color: "#e53935" },
+        { id: "research", name: "Исследования", icon: "fas fa-flask", color: "#8e24aa" }
+    ],
+    
+    // Хранение данных
+    storageKeys: {
+        decisions: 'micron_decisions_db',
+        history: 'micron_analysis_history',
+        settings: 'micron_user_settings'
+    }
 };
 
 // Состояние приложения
-const state = {
-    isSpinning: false,
-    currentAnswer: null,
-    history: [],
-    theme: 'light'
+const AppState = {
+    currentQuestion: '',
+    selectedMethod: 'semiconductor',
+    currentDecision: null,
+    decisionsHistory: [],
+    userSettings: {
+        theme: 'light',
+        sounds: true,
+        animations: true,
+        notifications: true
+    },
+    statistics: {
+        totalAnalyses: 0,
+        approved: 0,
+        rejected: 0,
+        pending: 0
+    }
 };
 
 // Инициализация приложения
 function initApp() {
+    loadSettings();
     loadHistory();
-    initTheme();
     setupEventListeners();
-    setupWishes();
-    initParticles();
+    updateStatistics();
+    initCharts();
     
-    // Анимация появления
-    document.querySelectorAll('.app-header, .question-section, .randomizer-section')
-        .forEach((el, i) => {
-            el.style.animationDelay = `${i * 0.1}s`;
-            el.classList.add('animated');
-        });
+    // Установка текущей даты
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+    
+    // Анимация загрузки
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+    }, 500);
 }
 
-// Загрузка истории из localStorage
+// Загрузка настроек
+function loadSettings() {
+    const savedSettings = localStorage.getItem(CONFIG.storageKeys.settings);
+    if (savedSettings) {
+        AppState.userSettings = JSON.parse(savedSettings);
+        
+        // Применение настроек
+        document.documentElement.setAttribute('data-theme', AppState.userSettings.theme);
+        document.getElementById('themeToggle').checked = AppState.userSettings.theme === 'dark';
+        document.getElementById('soundToggle').checked = AppState.userSettings.sounds;
+        document.getElementById('animationsToggle').checked = AppState.userSettings.animations;
+    }
+}
+
+// Сохранение настроек
+function saveSettings() {
+    localStorage.setItem(CONFIG.storageKeys.settings, JSON.stringify(AppState.userSettings));
+}
+
+// Загрузка истории
 function loadHistory() {
-    const savedHistory = localStorage.getItem(CONFIG.historyKey);
+    const savedHistory = localStorage.getItem(CONFIG.storageKeys.history);
     if (savedHistory) {
-        state.history = JSON.parse(savedHistory);
-        renderHistory();
+        AppState.decisionsHistory = JSON.parse(savedHistory);
+        renderDecisionsGrid();
+        updateDashboardStats();
     }
 }
 
 // Сохранение истории
 function saveHistory() {
-    localStorage.setItem(CONFIG.historyKey, JSON.stringify(state.history));
-}
-
-// Инициализация темы
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    state.theme = savedTheme;
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.getElementById('themeSwitch').checked = savedTheme === 'dark';
-}
-
-// Переключение темы
-function toggleTheme() {
-    state.theme = state.theme === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', state.theme);
-    localStorage.setItem('theme', state.theme);
-    
-    // Анимация переключения
-    document.body.style.transition = 'background-color 0.5s ease';
-    setTimeout(() => {
-        document.body.style.transition = '';
-    }, 500);
+    localStorage.setItem(CONFIG.storageKeys.history, JSON.stringify(AppState.decisionsHistory));
 }
 
 // Настройка обработчиков событий
 function setupEventListeners() {
-    // Ввод вопроса
-    const questionInput = document.getElementById('questionInput');
-    const clearBtn = document.getElementById('clearBtn');
-    
-    questionInput.addEventListener('input', function() {
-        clearBtn.style.visibility = this.value ? 'visible' : 'hidden';
+    // Навигация
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const section = btn.dataset.section;
+            switchSection(section);
+        });
     });
     
-    clearBtn.addEventListener('click', function() {
-        questionInput.value = '';
-        this.style.visibility = 'hidden';
-        questionInput.focus();
-    });
+    // Очистка вопроса
+    document.getElementById('clearQuestion').addEventListener('click', clearQuestion);
+    
+    // Генерация вопроса
+    document.getElementById('generateQuestion').addEventListener('click', generateRandomQuestion);
     
     // Примеры вопросов
-    document.querySelectorAll('.example-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+    document.querySelectorAll('.example-chip').forEach(chip => {
+        chip.addEventListener('click', function() {
             const question = this.dataset.question;
-            questionInput.value = question;
-            clearBtn.style.visibility = 'visible';
+            document.getElementById('techQuestion').value = question;
+            AppState.currentQuestion = question;
         });
     });
     
-    // Кнопка кручения
-    const spinBtn = document.getElementById('spinBtn');
-    spinBtn.addEventListener('click', spinWheel);
+    // Методы анализа
+    document.querySelectorAll('.method-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.method-option').forEach(o => o.classList.remove('active'));
+            this.classList.add('active');
+            AppState.selectedMethod = this.dataset.method;
+        });
+    });
     
-    // Быстрые ответы
-    document.querySelectorAll('.quick-btn').forEach(btn => {
+    // Запуск анализа
+    document.getElementById('executeAnalysis').addEventListener('click', executeAnalysis);
+    
+    // Быстрые решения
+    document.querySelectorAll('.quick-decision-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            if (state.isSpinning) return;
-            
-            const answer = this.dataset.answer;
-            showQuickAnswer(answer);
+            const decisionText = this.dataset.decision;
+            showQuickDecision(decisionText);
         });
     });
     
-    // Кнопка поделиться
-    const shareBtn = document.getElementById('shareBtn');
-    shareBtn.addEventListener('click', shareResult);
+    // Действия с результатом
+    document.getElementById('saveResult').addEventListener('click', saveCurrentDecision);
+    document.getElementById('exportResult').addEventListener('click', exportDecisionToPDF);
+    document.getElementById('shareResult').addEventListener('click', shareDecision);
     
-    // Случайное пожелание
-    const randomWishBtn = document.getElementById('randomWishBtn');
-    randomWishBtn.addEventListener('click', showRandomWish);
+    // Фильтры базы данных
+    document.getElementById('filterCategory').addEventListener('change', filterDecisions);
+    document.getElementById('filterResult').addEventListener('change', filterDecisions);
+    document.getElementById('searchDecisions').addEventListener('input', filterDecisions);
     
-    // Копирование пожеланий
-    document.querySelectorAll('.copy-wish').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const wish = this.dataset.wish;
-            copyToClipboard(wish);
-            showToast('Пожелание скопировано! ✨');
-        });
-    });
+    // Настройки
+    document.getElementById('themeToggle').addEventListener('change', toggleTheme);
+    document.getElementById('soundToggle').addEventListener('change', toggleSound);
+    document.getElementById('animationsToggle').addEventListener('change', toggleAnimations);
     
-    // Очистка истории
-    const clearHistoryBtn = document.getElementById('clearHistory');
-    clearHistoryBtn.addEventListener('click', clearHistory);
-    
-    // Переключение темы
-    const themeSwitch = document.getElementById('themeSwitch');
-    themeSwitch.addEventListener('change', toggleTheme);
+    // Документация
+    document.getElementById('documentationBtn').addEventListener('click', showDocumentation);
     
     // Модальное окно
-    const modalClose = document.getElementById('modalClose');
-    const modalOverlay = document.getElementById('modalOverlay');
-    
-    modalClose.addEventListener('click', () => {
-        modalOverlay.classList.add('hidden');
-    });
-    
-    modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-            modalOverlay.classList.add('hidden');
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
         }
     });
+    
+    // Ввод вопроса
+    const questionInput = document.getElementById('techQuestion');
+    questionInput.addEventListener('input', function() {
+        AppState.currentQuestion = this.value;
+    });
 }
 
-// Кручение колеса
-function spinWheel() {
-    if (state.isSpinning) return;
+// Переключение секций
+function switchSection(sectionId) {
+    // Обновление навигации
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.section === sectionId) {
+            btn.classList.add('active');
+        }
+    });
     
-    state.isSpinning = true;
-    const wheel = document.querySelector('.wheel-inner');
-    const spinBtn = document.getElementById('spinBtn');
-    const question = document.getElementById('questionInput').value.trim();
+    // Показ секции
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+    document.getElementById(sectionId).classList.add('active');
     
-    if (!question) {
-        showToast('Задайте вопрос сначала! 🤔');
-        state.isSpinning = false;
-        return;
+    // Прокрутка к началу
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Обновление контента при необходимости
+    if (sectionId === 'statistics') {
+        updateCharts();
     }
+}
+
+// Очистка вопроса
+function clearQuestion() {
+    document.getElementById('techQuestion').value = '';
+    AppState.currentQuestion = '';
+}
+
+// Генерация случайного вопроса
+function generateRandomQuestion() {
+    const randomIndex = Math.floor(Math.random() * CONFIG.exampleQuestions.length);
+    const question = CONFIG.exampleQuestions[randomIndex];
+    document.getElementById('techQuestion').value = question;
+    AppState.currentQuestion = question;
     
-    // Анимация кнопки
-    spinBtn.disabled = true;
-    spinBtn.style.transform = 'scale(0.95)';
-    
-    // Звук кручения
-    playSound('spin');
-    
-    // Случайное вращение
-    const spins = 5 + Math.random() * 3; // 5-8 полных оборотов
-    const segmentAngle = 360 / CONFIG.answers.length;
-    const randomSegment = Math.floor(Math.random() * CONFIG.answers.length);
-    const finalAngle = spins * 360 + randomSegment * segmentAngle + (Math.random() * segmentAngle - segmentAngle/2);
-    
-    // Анимация вращения
-    wheel.style.transition = 'transform 3s cubic-bezier(0.2, 0.8, 0.3, 1)';
-    wheel.style.transform = `rotate(${finalAngle}deg)`;
-    
-    // Эффект конфетти
-    createConfetti();
-    
-    // Показ результата
+    // Анимация
+    const input = document.getElementById('techQuestion');
+    input.style.transform = 'scale(1.02)';
     setTimeout(() => {
-        const answer = CONFIG.answers[randomSegment];
-        showResult(question, answer);
-        state.isSpinning = false;
-        spinBtn.disabled = false;
-        spinBtn.style.transform = '';
-        
-        // Звук результата
-        playSound('result');
-    }, 3000);
+        input.style.transform = '';
+    }, 300);
+    
+    playSound('click');
 }
 
-// Быстрый ответ
-function showQuickAnswer(answerText) {
-    const question = document.getElementById('questionInput').value.trim();
+// Выполнение анализа
+function executeAnalysis() {
+    const question = document.getElementById('techQuestion').value.trim();
+    
     if (!question) {
-        showToast('Задайте вопрос сначала! 🤔');
+        showNotification('Введите вопрос для анализа', 'warning');
         return;
     }
     
-    const answer = CONFIG.answers.find(a => a.text === answerText);
-    if (answer) {
-        showResult(question, answer);
-        playSound('click');
+    if (AppState.currentDecision) {
+        if (!confirm('Текущий результат будет потерян. Продолжить?')) {
+            return;
+        }
     }
+    
+    // Анимация запуска
+    const executeBtn = document.getElementById('executeAnalysis');
+    executeBtn.classList.add('disabled');
+    executeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Анализ выполняется...</span>';
+    
+    // Звук анализа
+    playSound('analysis');
+    
+    // Имитация процесса анализа
+    simulateAnalysis(question);
 }
 
-// Показать результат
-function showResult(question, answer) {
-    const resultSection = document.getElementById('resultSection');
-    const resultCard = resultSection.querySelector('.result-card');
+// Имитация анализа
+function simulateAnalysis(question) {
+    // Анимация транзисторов
+    const transistors = document.querySelectorAll('.transistor-element');
+    transistors.forEach(transistor => {
+        transistor.style.animation = 'transistor-glow 0.5s infinite';
+    });
     
-    // Обновление данных
-    document.getElementById('resultQuestion').textContent = `Вопрос: ${question}`;
-    document.getElementById('resultAnswer').textContent = answer.text;
-    document.getElementById('resultMessage').textContent = answer.message;
+    // Прогресс
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += 10;
+        
+        if (progress >= 100) {
+            clearInterval(progressInterval);
+            
+            // Завершение анализа
+            completeAnalysis(question);
+            
+            // Сброс анимации транзисторов
+            transistors.forEach(transistor => {
+                transistor.style.animation = '';
+            });
+        }
+    }, 300);
+}
+
+// Завершение анализа
+function completeAnalysis(question) {
+    // Случайный выбор решения
+    const randomDecision = CONFIG.decisions[Math.floor(Math.random() * CONFIG.decisions.length)];
     
-    // Анимация появления
-    resultCard.classList.remove('hidden');
-    
-    // Добавление в историю
-    const historyItem = {
-        question,
-        answer: answer.text,
-        emoji: answer.emoji,
-        message: answer.message,
-        timestamp: new Date().toISOString()
+    // Обновление состояния
+    AppState.currentDecision = {
+        ...randomDecision,
+        question: question,
+        method: AppState.selectedMethod,
+        timestamp: new Date().toISOString(),
+        id: Date.now()
     };
     
-    state.history.unshift(historyItem);
-    if (state.history.length > CONFIG.maxHistoryItems) {
-        state.history = state.history.slice(0, CONFIG.maxHistoryItems);
-    }
+    // Показ результата
+    showAnalysisResult();
     
-    saveHistory();
-    renderHistory();
+    // Обновление кнопки
+    const executeBtn = document.getElementById('executeAnalysis');
+    executeBtn.classList.remove('disabled');
+    executeBtn.innerHTML = '<i class="fas fa-play-circle"></i><span>Запустить анализ</span>';
+    
+    // Звук результата
+    playSound('decision');
+    
+    // Обновление статистики
+    updateStatistics();
+}
+
+// Показать результат анализа
+function showAnalysisResult() {
+    const resultContainer = document.querySelector('.result-container');
+    const decision = AppState.currentDecision;
+    
+    if (!decision) return;
+    
+    // Обновление данных
+    document.getElementById('resultQuestionText').textContent = decision.question;
+    document.getElementById('decisionText').textContent = decision.text;
+    document.getElementById('confidenceLevel').textContent = `${decision.confidence}%`;
+    document.getElementById('decisionReasoning').textContent = decision.reasoning;
+    
+    // Обновление метрик
+    const metrics = document.querySelectorAll('.metric-fill');
+    metrics[0].style.width = `${decision.metrics.efficiency}%`;
+    metrics[1].style.width = `${decision.metrics.profitability}%`;
+    metrics[2].style.width = `${decision.metrics.feasibility}%`;
+    
+    document.querySelectorAll('.metric-value')[0].textContent = `${decision.metrics.efficiency}%`;
+    document.querySelectorAll('.metric-value')[1].textContent = `${decision.metrics.profitability}%`;
+    document.querySelectorAll('.metric-value')[2].textContent = `${decision.metrics.feasibility}%`;
+    
+    // Обновление иконки
+    const decisionIcon = document.querySelector('.decision-icon-large i');
+    decisionIcon.className = decision.emoji === '✅' ? 'fas fa-check-circle success' :
+                            decision.emoji === '🔄' ? 'fas fa-sync-alt warning' :
+                            decision.emoji === '❌' ? 'fas fa-times-circle danger' :
+                            decision.emoji === '🔍' ? 'fas fa-search info' :
+                            'fas fa-exclamation-triangle warning';
+    
+    // Обновление даты и времени
+    updateDateTime();
+    
+    // Показ результата
+    resultContainer.classList.remove('hidden');
     
     // Прокрутка к результату
     setTimeout(() => {
-        resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 500);
 }
 
-// Настройка пожеланий
-function setupWishes() {
-    const wishesContainer = document.querySelector('.wishes-container');
+// Быстрое решение
+function showQuickDecision(decisionText) {
+    const question = document.getElementById('techQuestion').value.trim();
     
-    // Добавляем дополнительные пожелания
-    CONFIG.wishes.forEach((wish, index) => {
-        if (index < 4) return; // Первые 4 уже в HTML
-        
-        const emoji = getWishEmoji(wish);
-        const wishCard = document.createElement('div');
-        wishCard.className = 'wish-card';
-        wishCard.innerHTML = `
-            <div class="wish-emoji">${emoji}</div>
-            <div class="wish-content">
-                <p class="wish-text">${wish}</p>
-                <button class="copy-wish" data-wish="${wish}">
-                    <i class="far fa-copy"></i>
-                </button>
-            </div>
-        `;
-        
-        wishCard.querySelector('.copy-wish').addEventListener('click', function() {
-            const wishText = this.dataset.wish;
-            copyToClipboard(wishText);
-            showToast('Пожелание скопировано! ✨');
-        });
-        
-        wishesContainer.appendChild(wishCard);
-    });
-}
-
-// Получить эмодзи для пожелания
-function getWishEmoji(wish) {
-    const emojiMap = {
-        'радости': '🌟',
-        'улыбки': '😊',
-        'счастья': '💖',
-        'удачи': '🍀',
-        'мечты': '✨',
-        'свет': '💫',
-        'музыка': '🎶',
-        'вселенная': '🌌',
-        'сердце': '❤️',
-        'ветер': '🍃'
-    };
-    
-    for (const [word, emoji] of Object.entries(emojiMap)) {
-        if (wish.toLowerCase().includes(word)) {
-            return emoji;
-        }
+    if (!question) {
+        showNotification('Введите вопрос для принятия решения', 'warning');
+        return;
     }
     
-    return '✨';
+    const decisionMap = {
+        'ДА': {
+            text: 'РЕКОМЕНДУЕТСЯ',
+            emoji: '✅',
+            confidence: 80,
+            reasoning: 'Быстрое решение на основе экспертной оценки. Рекомендуется провести дополнительный анализ для подтверждения.',
+            metrics: { efficiency: 75, profitability: 70, feasibility: 80 }
+        },
+        'НЕТ': {
+            text: 'ОТКЛОНИТЬ',
+            emoji: '❌',
+            confidence: 85,
+            reasoning: 'Быстрое решение на основе экспертной оценки. Проект имеет значительные риски и требует пересмотра.',
+            metrics: { efficiency: 35, profitability: 30, feasibility: 40 }
+        },
+        'ИССЛЕДОВАТЬ': {
+            text: 'ИССЛЕДОВАТЬ ДАЛЬШЕ',
+            emoji: '🔍',
+            confidence: 50,
+            reasoning: 'Требуется дополнительный анализ. Недостаточно данных для принятия окончательного решения.',
+            metrics: { efficiency: 50, profitability: 50, feasibility: 50 }
+        }
+    };
+    
+    AppState.currentDecision = {
+        ...decisionMap[decisionText],
+        question: question,
+        method: 'quick',
+        timestamp: new Date().toISOString(),
+        id: Date.now()
+    };
+    
+    showAnalysisResult();
+    playSound('click');
 }
 
-// Случайное пожелание
-function showRandomWish() {
-    const randomWish = CONFIG.wishes[Math.floor(Math.random() * CONFIG.wishes.length)];
-    const emoji = getWishEmoji(randomWish);
+// Сохранение решения
+function saveCurrentDecision() {
+    if (!AppState.currentDecision) {
+        showNotification('Нет результата для сохранения', 'warning');
+        return;
+    }
     
-    showModal('✨ Случайное пожелание', `
-        <div style="text-align: center; padding: 20px 0;">
-            <div style="font-size: 3rem; margin-bottom: 20px;">${emoji}</div>
-            <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 25px;">${randomWish}</p>
-            <button onclick="copyToClipboard('${randomWish}'); showToast('Пожелание скопировано! ✨')" 
-                    style="padding: 10px 20px; background: var(--primary-color); color: white; border: none; border-radius: 10px; cursor: pointer;">
-                <i class="far fa-copy"></i> Копировать
-            </button>
-        </div>
-    `);
+    // Добавление в историю
+    AppState.decisionsHistory.unshift({
+        ...AppState.currentDecision,
+        savedAt: new Date().toISOString()
+    });
+    
+    // Ограничение истории
+    if (AppState.decisionsHistory.length > 50) {
+        AppState.decisionsHistory = AppState.decisionsHistory.slice(0, 50);
+    }
+    
+    // Сохранение
+    saveHistory();
+    renderDecisionsGrid();
+    updateDashboardStats();
+    updateStatistics();
+    
+    showNotification('Решение сохранено в базу данных', 'success');
+    playSound('click');
+}
+
+// Экспорт в PDF
+function exportDecisionToPDF() {
+    if (!AppState.currentDecision) {
+        showNotification('Нет результата для экспорта', 'warning');
+        return;
+    }
+    
+    // Имитация экспорта
+    showNotification('Формирование PDF документа...', 'info');
+    
+    setTimeout(() => {
+        showNotification('PDF документ готов к скачиванию', 'success');
+        
+        // Создание ссылки для скачивания
+        const data = `
+            Результат анализа: ${AppState.currentDecision.text}
+            Вопрос: ${AppState.currentDecision.question}
+            Уверенность: ${AppState.currentDecision.confidence}%
+            Метод анализа: ${AppState.selectedMethod}
+            Дата: ${new Date().toLocaleDateString()}
+            Время: ${new Date().toLocaleTimeString()}
+            
+            Обоснование:
+            ${AppState.currentDecision.reasoning}
+            
+            Метрики:
+            - Эффективность: ${AppState.currentDecision.metrics.efficiency}%
+            - Рентабельность: ${AppState.currentDecision.metrics.profitability}%
+            - Технологичность: ${AppState.currentDecision.metrics.feasibility}%
+            
+            Сгенерировано системой МИКРОН Рандомайзер
+        `;
+        
+        const blob = new Blob([data], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `micron_decision_${Date.now()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 1500);
+}
+
+// Поделиться решением
+function shareDecision() {
+    if (!AppState.currentDecision) {
+        showNotification('Нет результата для публикации', 'warning');
+        return;
+    }
+    
+    const shareData = {
+        title: 'Решение МИКРОН Рандомайзер',
+        text: `Результат анализа: ${AppState.currentDecision.text}\nВопрос: ${AppState.currentDecision.question}`,
+        url: window.location.href
+    };
+    
+    if (navigator.share) {
+        navigator.share(shareData).catch(console.error);
+    } else {
+        // Копирование в буфер обмена
+        navigator.clipboard.writeText(shareData.text).then(() => {
+            showNotification('Текст скопирован в буфер обмена', 'success');
+        });
+    }
     
     playSound('click');
 }
 
-// Рендер истории
-function renderHistory() {
-    const historyList = document.getElementById('historyList');
-    historyList.innerHTML = '';
+// Рендер сетки решений
+function renderDecisionsGrid() {
+    const grid = document.getElementById('decisionsGrid');
+    if (!grid) return;
     
-    if (state.history.length === 0) {
-        historyList.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                <i class="fas fa-history" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
-                <p>История пуста. Задайте вопрос, чтобы начать!</p>
+    if (AppState.decisionsHistory.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-database" style="font-size: 3rem; color: #ccc; margin-bottom: 20px;"></i>
+                <h4>База данных пуста</h4>
+                <p>Сохраненные решения появятся здесь</p>
             </div>
         `;
         return;
     }
     
-    state.history.forEach((item, index) => {
-        const date = new Date(item.timestamp);
-        const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    grid.innerHTML = AppState.decisionsHistory.slice(0, 12).map(decision => {
+        const date = new Date(decision.timestamp);
+        const statusClass = decision.text.includes('РЕКОМЕНДУЕТСЯ') ? 'approved' :
+                          decision.text.includes('ОТКЛОНИТЬ') ? 'rejected' : 'pending';
         
-        const historyItem = document.createElement('div');
-        historyItem.className = 'history-item';
-        historyItem.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                <span style="font-size: 1.5rem;">${item.emoji}</span>
-                <strong style="color: var(--primary-color);">${item.answer}</strong>
-                <span style="margin-left: auto; font-size: 0.9rem; color: var(--text-secondary);">${timeString}</span>
+        return `
+            <div class="decision-card" data-id="${decision.id}">
+                <div class="decision-header">
+                    <span class="decision-category">
+                        <i class="fas fa-microchip"></i>
+                        ${getCategoryName(decision.category)}
+                    </span>
+                    <span class="decision-status status-${statusClass}">
+                        ${decision.text}
+                    </span>
+                </div>
+                <div class="decision-question">
+                    ${decision.question.length > 100 ? 
+                      decision.question.substring(0, 100) + '...' : 
+                      decision.question}
+                </div>
+                <div class="decision-meta">
+                    <span>
+                        <i class="fas fa-calendar"></i>
+                        ${date.toLocaleDateString()}
+                    </span>
+                    <span>
+                        <i class="fas fa-chart-bar"></i>
+                        ${decision.confidence}%
+                    </span>
+                </div>
             </div>
-            <p style="margin-bottom: 5px; font-weight: 500;">${item.question}</p>
-            <p style="font-size: 0.9rem; color: var(--text-secondary); font-style: italic;">${item.message}</p>
         `;
-        
-        historyList.appendChild(historyItem);
-    });
-}
-
-// Очистка истории
-function clearHistory() {
-    if (confirm('Очистить всю историю?')) {
-        state.history = [];
-        saveHistory();
-        renderHistory();
-        showToast('История очищена! 🗑️');
-        playSound('click');
-    }
-}
-
-// Копирование в буфер обмена
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        console.log('Текст скопирован:', text);
-    }).catch(err => {
-        console.error('Ошибка копирования:', err);
-        // Fallback для старых браузеров
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-    });
-}
-
-// Поделиться результатом
-function shareResult() {
-    const question = document.getElementById('resultQuestion').textContent;
-    const answer = document.getElementById('resultAnswer').textContent;
-    const message = document.getElementById('resultMessage').textContent;
+    }).join('');
     
-    const shareText = `✨ Магический Рандомайзер ✨\n\n${question}\n\nОтвет: ${answer}\n\n${message}\n\nПопробуйте и вы: ${window.location.href}`;
-    
-    if (navigator.share) {
-        navigator.share({
-            title: 'Магический Рандомайзер',
-            text: shareText,
-            url: window.location.href
+    // Добавление обработчиков кликов
+    document.querySelectorAll('.decision-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const decisionId = parseInt(this.dataset.id);
+            const decision = AppState.decisionsHistory.find(d => d.id === decisionId);
+            if (decision) {
+                showDecisionDetails(decision);
+            }
         });
-    } else {
-        copyToClipboard(shareText);
-        showToast('Результат скопирован в буфер обмена! 📋');
-    }
-    
-    playSound('click');
+    });
 }
 
-// Создание конфетти
-function createConfetti() {
-    const container = document.querySelector('.confetti-container');
-    const colors = ['#FF6B8B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
+// Фильтрация решений
+function filterDecisions() {
+    const category = document.getElementById('filterCategory').value;
+    const result = document.getElementById('filterResult').value;
+    const search = document.getElementById('searchDecisions').value.toLowerCase();
     
-    for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = `${Math.random() * 100}vw`;
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDelay = `${Math.random() * 2}s`;
-        confetti.style.width = `${5 + Math.random() * 10}px`;
-        confetti.style.height = `${10 + Math.random() * 20}px`;
+    const cards = document.querySelectorAll('.decision-card');
+    cards.forEach(card => {
+        const categoryMatch = category === 'all' || 
+            card.querySelector('.decision-category').textContent.includes(getCategoryName(category));
         
-        container.appendChild(confetti);
+        const resultMatch = result === 'all' ||
+            card.querySelector('.decision-status').classList.contains(`status-${result}`);
         
-        // Удаление после анимации
-        setTimeout(() => {
-            confetti.remove();
-        }, 3000);
+        const searchMatch = search === '' ||
+            card.querySelector('.decision-question').textContent.toLowerCase().includes(search);
+        
+        card.style.display = categoryMatch && resultMatch && searchMatch ? 'block' : 'none';
+    });
+}
+
+// Обновление статистики дашборда
+function updateDashboardStats() {
+    const total = AppState.decisionsHistory.length;
+    const approved = AppState.decisionsHistory.filter(d => 
+        d.text.includes('РЕКОМЕНДУЕТСЯ')).length;
+    const pending = AppState.decisionsHistory.filter(d => 
+        d.text.includes('ИССЛЕДОВАТЬ') || d.text.includes('ТРЕБУЕТ')).length;
+    
+    document.getElementById('totalDecisions').textContent = total;
+    document.getElementById('approvedDecisions').textContent = approved;
+    document.getElementById('pendingDecisions').textContent = pending;
+}
+
+// Обновление общей статистики
+function updateStatistics() {
+    AppState.statistics.totalAnalyses = AppState.decisionsHistory.length;
+    AppState.statistics.approved = AppState.decisionsHistory.filter(d => 
+        d.text.includes('РЕКОМЕНДУЕТСЯ')).length;
+    AppState.statistics.rejected = AppState.decisionsHistory.filter(d => 
+        d.text.includes('ОТКЛОНИТЬ')).length;
+    AppState.statistics.pending = AppState.decisionsHistory.length - 
+        AppState.statistics.approved - AppState.statistics.rejected;
+}
+
+// Получение названия категории
+function getCategoryName(categoryId) {
+    const category = CONFIG.categories.find(c => c.id === categoryId);
+    return category ? category.name : 'Технологии';
+}
+
+// Показать детали решения
+function showDecisionDetails(decision) {
+    const date = new Date(decision.timestamp);
+    
+    const modalBody = `
+        <div class="decision-details">
+            <div class="detail-header">
+                <h4>${decision.text} ${decision.emoji}</h4>
+                <p class="detail-meta">
+                    <i class="fas fa-calendar"></i> ${date.toLocaleDateString()}
+                    <i class="fas fa-clock"></i> ${date.toLocaleTimeString()}
+                </p>
+            </div>
+            
+            <div class="detail-section">
+                <h5>Вопрос:</h5>
+                <p>${decision.question}</p>
+            </div>
+            
+            <div class="detail-section">
+                <h5>Обоснование:</h5>
+                <p>${decision.reasoning}</p>
+            </div>
+            
+            <div class="detail-section">
+                <h5>Метрики:</h5>
+                <div class="detail-metrics">
+                    <div class="detail-metric">
+                        <span class="metric-label">Эффективность</span>
+                        <div class="metric-value">${decision.metrics.efficiency}%</div>
+                    </div>
+                    <div class="detail-metric">
+                        <span class="metric-label">Рентабельность</span>
+                        <div class="metric-value">${decision.metrics.profitability}%</div>
+                    </div>
+                    <div class="detail-metric">
+                        <span class="metric-label">Технологичность</span>
+                        <div class="metric-value">${decision.metrics.feasibility}%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="detail-section">
+                <h5>Детали анализа:</h5>
+                <ul>
+                    <li>Метод: ${decision.method || 'Полупроводниковый анализ'}</li>
+                    <li>Уверенность: ${decision.confidence}%</li>
+                    <li>Категория: ${getCategoryName(decision.category)}</li>
+                </ul>
+            </div>
+        </div>
+    `;
+    
+    showModal('Детали решения', modalBody);
+}
+
+// Обновление даты и времени
+function updateDateTime() {
+    const now = new Date();
+    
+    document.getElementById('resultDate')?.textContent = now.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+    
+    document.getElementById('resultTime')?.textContent = now.toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+// Переключение темы
+function toggleTheme() {
+    const isDark = document.getElementById('themeToggle').checked;
+    AppState.userSettings.theme = isDark ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', AppState.userSettings.theme);
+    saveSettings();
+}
+
+// Переключение звуков
+function toggleSound() {
+    AppState.userSettings.sounds = document.getElementById('soundToggle').checked;
+    saveSettings();
+}
+
+// Переключение анимаций
+function toggleAnimations() {
+    AppState.userSettings.animations = document.getElementById('animationsToggle').checked;
+    saveSettings();
+}
+
+// Воспроизведение звука
+function playSound(soundName) {
+    if (!AppState.userSettings.sounds) return;
+    
+    const audio = document.getElementById(soundName + 'Sound');
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log('Ошибка воспроизведения:', e));
     }
 }
 
 // Показать уведомление
-function showToast(message) {
-    // Удаляем старый тост, если есть
-    const oldToast = document.querySelector('.toast');
-    if (oldToast) oldToast.remove();
+function showNotification(message, type = 'info') {
+    // Удаляем старые уведомления
+    const oldNotification = document.querySelector('.notification');
+    if (oldNotification) oldNotification.remove();
     
-    // Создаем новый тост
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = message;
+    // Создаем новое уведомление
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                         type === 'warning' ? 'exclamation-triangle' : 
+                         type === 'error' ? 'times-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+    `;
     
-    // Стили для тоста
-    toast.style.position = 'fixed';
-    toast.style.bottom = '20px';
-    toast.style.left = '50%';
-    toast.style.transform = 'translateX(-50%)';
-    toast.style.background = 'var(--gradient-primary)';
-    toast.style.color = 'white';
-    toast.style.padding = '12px 24px';
-    toast.style.borderRadius = '50px';
-    toast.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
-    toast.style.zIndex = '1001';
-    toast.style.animation = 'slide-up 0.3s ease-out';
+    // Стили
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        background: ${type === 'success' ? 'var(--success-color)' :
+                     type === 'warning' ? 'var(--warning-color)' :
+                     type === 'error' ? 'var(--danger-color)' : 'var(--info-color)'};
+        color: white;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+        box-shadow: var(--shadow-medium);
+    `;
     
-    document.body.appendChild(toast);
+    document.body.appendChild(notification);
     
     // Удаляем через 3 секунды
     setTimeout(() => {
-        toast.style.animation = 'slide-down 0.3s ease-out forwards';
-        setTimeout(() => toast.remove(), 300);
+        notification.style.animation = 'slideOut 0.3s ease-out forwards';
+        setTimeout(() => notification.remove(), 300);
     }, 3000);
+}
+
+// Показать документацию
+function showDocumentation() {
+    const modalBody = `
+        <div class="documentation">
+            <h4>Документация МИКРОН Рандомайзер</h4>
+            
+            <div class="doc-section">
+                <h5>Назначение системы</h5>
+                <p>Система предназначена для поддержки принятия решений в области микроэлектроники на основе анализа данных и экспертных оценок.</p>
+            </div>
+            
+            <div class="doc-section">
+                <h5>Методы анализа</h5>
+                <ul>
+                    <li><strong>Полупроводниковый анализ</strong> - использует статистические данные производства</li>
+                    <li><strong>Квантовый рандомизатор</strong> - применяет принципы квантовой механики</li>
+                    <li><strong>Нейросетевой алгоритм</strong> - искусственный интеллект для анализа</li>
+                </ul>
+            </div>
+            
+            <div class="doc-section">
+                <h5>Метрики оценки</h5>
+                <ul>
+                    <li><strong>Эффективность</strong> - оценка технологической эффективности</li>
+                    <li><strong>Рентабельность</strong> - экономическая обоснованность</li>
+                    <li><strong>Технологичность</strong> - возможность реализации с текущими ресурсами</li>
+                </ul>
+            </div>
+            
+            <div class="doc-section">
+                <h5>База данных</h5>
+                <p>Все принятые решения сохраняются в локальной базе данных для последующего анализа и обучения системы.</p>
+            </div>
+        </div>
+    `;
+    
+    showModal('Документация', modalBody);
 }
 
 // Показать модальное окно
 function showModal(title, content) {
     document.getElementById('modalTitle').textContent = title;
     document.getElementById('modalBody').innerHTML = content;
-    document.getElementById('modalOverlay').classList.remove('hidden');
+    document.getElementById('modalOverlay').classList.add('active');
 }
 
-// Звуковые эффекты
-function playSound(type) {
-    const audio = document.getElementById(`${type}Sound`);
-    if (audio) {
-        audio.currentTime = 0;
-        audio.play().catch(e => console.log('Audio play failed:', e));
-    }
+// Закрыть модальное окно
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
 }
 
-// Функции для кнопок в подвале
-function shareApp() {
-    const shareText = `✨ Попробуйте Магический Рандомайзер! ✨\n\nКрасивое приложение с рандомайзером "Да/Нет/Наверное" и пожеланиями дня.\n\n${window.location.href}`;
-    
-    if (navigator.share) {
-        navigator.share({
-            title: 'Магический Рандомайзер',
-            text: shareText,
-            url: window.location.href
-        });
-    } else {
-        copyToClipboard(shareText);
-        showToast('Ссылка скопирована! 📋');
-    }
-    
-    playSound('click');
+// Инициализация графиков
+function initCharts() {
+    // Инициализация графиков будет в отдельном файле charts.js
+    console.log('Charts initialized');
 }
 
-function rateApp() {
-    showModal('⭐ Нравится приложение?', `
-        <div style="text-align: center; padding: 20px 0;">
-            <div style="font-size: 4rem; margin-bottom: 20px;">✨</div>
-            <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 25px;">
-                Если вам нравится это приложение, поделитесь им с друзьями!<br>
-                Ваша поддержка очень важна для нас!
-            </p>
-            <div style="display: flex; gap: 15px; justify-content: center;">
-                <button onclick="shareApp()" style="padding: 12px 25px; background: var(--primary-color); color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem;">
-                    <i class="fas fa-share-alt"></i> Поделиться
-                </button>
-            </div>
-        </div>
-    `);
+// Обновление графиков
+function updateCharts() {
+    console.log('Charts updated');
 }
 
-function showAbout() {
-    showModal('✨ О приложении', `
-        <div style="line-height: 1.6;">
-            <p style="margin-bottom: 15px;">
-                <strong>Магический Рандомайзер</strong> — это красивое приложение для тех, кто ищет ответы у вселенной или просто хочет получить позитивное пожелание на день.
-            </p>
-            
-            <div style="background: rgba(108, 99, 255, 0.1); padding: 15px; border-radius: 10px; margin: 20px 0;">
-                <h4 style="color: var(--primary-color); margin-bottom: 10px;">🌟 Возможности:</h4>
-                <ul style="padding-left: 20px;">
-                    <li>Рандомайзер "Да/Нет/Наверное" с красивой анимацией</li>
-                    <li>8 разных вариантов ответов</li>
-                    <li>Пожелания прекрасного дня</li>
-                    <li>История ваших вопросов</li>
-                    <li>Тёмная и светлая темы</li>
-                    <li>Анимации и звуковые эффекты</li>
-                </ul>
-            </div>
-            
-            <p style="margin: 20px 0;">
-                Сделано с ❤️ и магией для всех, кто верит в чудеса и позитив!
-            </p>
-            
-            <div style="text-align: center; margin-top: 30px; color: var(--text-secondary); font-size: 0.9rem;">
-                Версия 1.0.0
-            </div>
-        </div>
-    `);
-}
-
-// Инициализация при загрузке
+// Запуск при загрузке страницы
 document.addEventListener('DOMContentLoaded', initApp);
