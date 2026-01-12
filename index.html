@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тотализатор: Кто уволится в 2026?</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключаем Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -175,16 +177,6 @@
             transform: translateY(-2px);
         }
         
-        #shareBtn {
-            background: #3498db;
-            color: white;
-        }
-        
-        #shareBtn:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
-        
         #saveBtn {
             background: #1abc9c;
             color: white;
@@ -192,6 +184,16 @@
         
         #saveBtn:hover {
             background: #16a085;
+            transform: translateY(-2px);
+        }
+        
+        #shareBtn {
+            background: #3498db;
+            color: white;
+        }
+        
+        #shareBtn:hover {
+            background: #2980b9;
             transform: translateY(-2px);
         }
         
@@ -308,6 +310,67 @@
             border-top: 1px solid #ecf0f1;
         }
         
+        .leaderboard {
+            margin-top: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid transparent;
+        }
+        
+        .leaderboard-item.me {
+            border-left-color: #3498db;
+            background: #e8f4fc;
+        }
+        
+        .rank {
+            font-weight: bold;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .rank-1 { color: gold; font-size: 1.2em; }
+        .rank-2 { color: silver; font-size: 1.1em; }
+        .rank-3 { color: #cd7f32; }
+        
+        .user-name {
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+        
+        .user-bet {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+        
+        .refresh-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
         .modal {
             display: none;
             position: fixed;
@@ -351,14 +414,40 @@
             display: flex;
             justify-content: space-between;
         }
+        
+        .candidate-avg {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            margin-top: 3px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-left: 5px;
+        }
+        
+        .status-live {
+            background: #e8f6f3;
+            color: #1abc9c;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🏆 Тотализатор 2026</h1>
+        <h1>🏆 Тотализатор 2026 <span class="status-badge status-live">LIVE</span></h1>
         <div class="subtitle">Кто первый уволится в 2026? Распределите 100 жетонов!</div>
         
-        <div class="total-tokens">Осталось жетонов: <span id="tokensLeft">100</span></div>
+        <div class="total-tokens">
+            <div>Осталось жетонов: <span id="tokensLeft">100</span></div>
+            <div style="font-size: 0.9em; margin-top: 8px;">
+                📊 Всего ставок: <span id="totalBets">0</span> 
+                <button onclick="loadRealStats()" class="refresh-btn">🔄 Обновить</button>
+            </div>
+        </div>
+        
         <div class="token-info">Чем больше жетонов — тем выше вероятность увольнения по вашему мнению</div>
         
         <div class="game-area">
@@ -374,18 +463,27 @@
                     <button id="shareBtn" class="hidden">Поделиться</button>
                 </div>
                 
-                <div class="stats">
+                <!-- Статистика в реальном времени -->
+                <div class="stats" id="realStats">
                     <div class="stat-box">
-                        <div class="stat-value" id="totalBets">0</div>
+                        <div class="stat-value" id="realTotalBets">0</div>
                         <div class="stat-label">Всего ставок</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-value" id="topChoice">-</div>
+                        <div class="stat-value" id="topCandidate">-</div>
                         <div class="stat-label">Лидер сообщества</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-value" id="yourScore">0</div>
-                        <div class="stat-label">Ваш рейтинг</div>
+                        <div class="stat-value" id="yourPosition">-</div>
+                        <div class="stat-label">Ваше место</div>
+                    </div>
+                </div>
+                
+                <!-- Таблица лидеров -->
+                <div style="margin-top: 20px;">
+                    <h3>🏆 Таблица лидеров</h3>
+                    <div id="leaderboard" class="leaderboard">
+                        <div class="loading">Загрузка рейтинга...</div>
                     </div>
                 </div>
             </div>
@@ -402,10 +500,12 @@
                 </div>
                 <div id="noResults">
                     <p>Сделайте ставку, чтобы увидеть результаты!</p>
-                    <p><strong>Лидеры по версии сообщества:</strong></p>
-                    <ol id="communityTop">
-                        <li>Загрузка...</li>
-                    </ol>
+                    <div id="communityStats">
+                        <p><strong>Лидеры по версии сообщества:</strong></p>
+                        <ol id="communityTop">
+                            <li>Загрузка...</li>
+                        </ol>
+                    </div>
                     <button id="viewAllBtn" style="width: 100%; margin-top: 15px;">Посмотреть все ставки</button>
                 </div>
             </div>
@@ -416,7 +516,7 @@
             <span id="userCount">Играют: 1 человек</span>
         </div>
     </div>
-    
+
     <!-- Модальное окно со всеми ставками -->
     <div id="allBetsModal" class="modal">
         <div class="modal-content">
@@ -425,11 +525,18 @@
             <div id="allBetsList" class="community-list">
                 Загрузка...
             </div>
-            <button onclick="loadMoreBets()" id="loadMoreBtn" style="width: 100%; margin-top: 15px;">Загрузить еще</button>
         </div>
     </div>
 
     <script>
+        // ========== КОНФИГУРАЦИЯ SUPABASE ==========
+        // ВАШИ КЛЮЧИ SUPABASE
+        const SUPABASE_URL = 'https://emsdxguafvggifztgeks.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_hhEWBsXgWr_TTC9rFp7Qfg_SfuD6bYl';
+        
+        // Инициализация Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
         // Данные участников
         const people = [
             "Подвалкова", "Сапьяная", "Попов", "Балыкина", "Биличенко", 
@@ -444,30 +551,23 @@
             "Королева": 7, "Жилко": 15, "Туркина": 9, "Буркова": 8, "Юрчихина": 4
         };
 
-        // Имитация базы данных через localStorage и Cloudflare Workers
+        // Глобальные переменные
         let userBets = {};
-        let communityBets = {};
-        let userStats = {
+        let userName = '';
+        let userId = '';
+        let leaderboardData = [];
+        let communityStats = {
             totalBets: 0,
-            topChoice: "",
-            userScore: 0
+            topCandidate: '',
+            candidateStats: {},
+            userCount: 0
         };
-        
-        // Генератор уникального ID пользователя
-        const userId = localStorage.getItem('tot_user_id') || 
-                      'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('tot_user_id', userId);
-        
-        // Имя пользователя
-        let userName = localStorage.getItem('tot_user_name');
-        if (!userName) {
-            userName = prompt("Введите ваше имя для рейтинга:", "Анонимный игрок");
-            if (userName) localStorage.setItem('tot_user_name', userName);
-        }
 
-        // Инициализация
-        function init() {
-            // Загрузка сохраненных ставок
+        // ========== ИНИЦИАЛИЗАЦИЯ ==========
+        async function init() {
+            console.log('Инициализация приложения...');
+            
+            // Инициализация ставок
             const savedBets = localStorage.getItem('tot_user_bets');
             if (savedBets) {
                 userBets = JSON.parse(savedBets);
@@ -475,68 +575,447 @@
                 people.forEach(person => userBets[person] = 0);
             }
             
-            // Загрузка данных сообщества
-            loadCommunityData();
+            // Получаем или создаем имя пользователя
+            userName = localStorage.getItem('tot_user_name');
+            if (!userName) {
+                // Проверяем Telegram Web App
+                if (window.Telegram?.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    const user = tg.initDataUnsafe?.user;
+                    if (user) {
+                        userName = user.first_name || user.username || 'Telegram User';
+                        userId = `tg_${user.id}`;
+                    }
+                }
+                
+                if (!userName) {
+                    userName = prompt("Введите ваше имя для таблицы лидеров:", 
+                                    "Игрок_" + Math.floor(Math.random() * 1000));
+                }
+                
+                if (userName) localStorage.setItem('tot_user_name', userName);
+            }
+            
+            // Создаем уникальный ID если еще нет
+            if (!userId) {
+                userId = localStorage.getItem('tot_user_id');
+                if (!userId) {
+                    userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    localStorage.setItem('tot_user_id', userId);
+                }
+            }
+            
+            // Инициализация Telegram Web App (если есть)
+            if (window.Telegram?.WebApp) {
+                const tg = window.Telegram.WebApp;
+                tg.expand();
+                tg.enableClosingConfirmation();
+                
+                // Устанавливаем тему
+                if (tg.colorScheme === 'dark') {
+                    document.body.style.background = '#1e1e1e';
+                    document.querySelector('.container').style.background = '#2d3436';
+                    document.querySelector('.container').style.color = '#ffffff';
+                }
+            }
+            
+            // Загружаем реальную статистику
+            await loadRealStats();
             renderBettingArea();
             updateTokensLeft();
+            
+            // Проверяем, если уже есть сохраненные ставки
+            const usedTokens = Object.values(userBets).reduce((a, b) => a + b, 0);
+            if (usedTokens > 0) {
+                document.getElementById('saveBtn').classList.remove('hidden');
+                document.getElementById('shareBtn').classList.remove('hidden');
+            }
+            
+            console.log('Инициализация завершена');
         }
 
-        // Загрузка данных сообщества (имитация API)
-        async function loadCommunityData() {
+        // ========== РАБОТА С БАЗОЙ ДАННЫХ ==========
+
+        // Загрузка реальной статистики
+        async function loadRealStats() {
             try {
-                // Здесь будет реальный запрос к API
-                // const response = await fetch('https://api.example.com/bets');
-                // communityBets = await response.json();
+                console.log('Загрузка статистики из Supabase...');
                 
-                // Имитация данных
-                communityBets = {
-                    "total": 42,
-                    "topChoice": "Жилко",
-                    "userCount": 15,
-                    "bets": [
-                        {name: "Игрок 1", choice: "Жилко", score: 85},
-                        {name: "Игрок 2", choice: "Биличенко", score: 92},
-                        {name: "Игрок 3", choice: "Куликов", score: 78}
-                    ]
+                // Загружаем все ставки
+                const { data: bets, error: betsError } = await supabase
+                    .from('bets')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (betsError) throw betsError;
+                
+                // Загружаем статистику кандидатов
+                const { data: candidateStats, error: statsError } = await supabase
+                    .from('candidate_stats')
+                    .select('*');
+                
+                if (statsError) throw statsError;
+                
+                // Загружаем глобальную статистику
+                const { data: globalStats, error: globalError } = await supabase
+                    .from('global_stats')
+                    .select('*')
+                    .limit(1);
+                
+                if (globalError) throw globalError;
+                
+                // Обновляем счетчики
+                communityStats.totalBets = bets?.length || 0;
+                communityStats.userCount = globalStats?.[0]?.active_users || 1;
+                
+                // Обновляем UI
+                document.getElementById('realTotalBets').textContent = communityStats.totalBets;
+                document.getElementById('totalBets').textContent = communityStats.totalBets;
+                document.getElementById('userCount').textContent = `Играют: ${communityStats.userCount} человек`;
+                
+                // Обновляем статистику кандидатов
+                communityStats.candidateStats = {};
+                if (candidateStats) {
+                    candidateStats.forEach(stat => {
+                        communityStats.candidateStats[stat.candidate_name] = stat.average_percentage || 0;
+                    });
+                }
+                
+                // Рассчитываем лидера сообщества
+                await calculateTopCandidate(bets);
+                
+                // Строим таблицу лидеров
+                await buildLeaderboard(bets);
+                
+                // Обновляем UI сообщества
+                updateCommunityUI();
+                
+                console.log('Статистика загружена успешно');
+                
+            } catch (error) {
+                console.error('Ошибка загрузки статистики:', error);
+                showNotification('⚠️ Ошибка загрузки данных. Проверьте подключение к Supabase.');
+                
+                // Показываем демо-данные для тестирования
+                showDemoData();
+            }
+        }
+
+        // Расчет лидера сообщества
+        async function calculateTopCandidate(bets) {
+            if (!bets || bets.length === 0) {
+                communityStats.topCandidate = "Нет данных";
+                return;
+            }
+            
+            // Считаем голоса за каждого кандидата (по top_choice)
+            const candidateVotes = {};
+            bets.forEach(bet => {
+                if (bet.top_choice) {
+                    candidateVotes[bet.top_choice] = (candidateVotes[bet.top_choice] || 0) + 1;
+                }
+            });
+            
+            // Находим лидера
+            let topCandidate = '';
+            let maxVotes = 0;
+            Object.keys(candidateVotes).forEach(candidate => {
+                if (candidateVotes[candidate] > maxVotes) {
+                    maxVotes = candidateVotes[candidate];
+                    topCandidate = candidate;
+                }
+            });
+            
+            communityStats.topCandidate = topCandidate || "Нет данных";
+            document.getElementById('topCandidate').textContent = topCandidate || "-";
+        }
+
+        // Сохранение ставки в базу данных
+        async function saveBetToDatabase() {
+            const usedTokens = Object.values(userBets).reduce((a, b) => a + b, 0);
+            
+            if (usedTokens !== 100) {
+                alert("Сначала распределите все 100 жетонов!");
+                return;
+            }
+            
+            // Определяем главный выбор (кандидат с максимальной ставкой)
+            let topChoice = '';
+            let maxBet = 0;
+            Object.keys(userBets).forEach(person => {
+                if (userBets[person] > maxBet) {
+                    maxBet = userBets[person];
+                    topChoice = person;
+                }
+            });
+            
+            // Рассчитываем "очки" для рейтинга
+            const score = Math.floor(maxBet * 1.5 + Math.random() * 20);
+            
+            try {
+                // Проверяем, есть ли уже ставка от этого пользователя
+                const { data: existingBet } = await supabase
+                    .from('bets')
+                    .select('id')
+                    .eq('user_id', userId)
+                    .maybeSingle();
+                
+                const betData = {
+                    user_id: userId,
+                    user_name: userName,
+                    bets: userBets,
+                    top_choice: topChoice,
+                    total_score: score,
+                    created_at: new Date().toISOString()
                 };
                 
-                updateCommunityStats();
-            } catch (error) {
-                console.log("Ошибка загрузки данных сообщества");
-                communityBets = {total: 0, topChoice: "Нет данных", userCount: 1};
-            }
-        }
-
-        // Сохранение ставок в "облако" (имитация)
-        async function saveBetToCloud() {
-            const betData = {
-                userId: userId,
-                userName: userName,
-                bets: userBets,
-                timestamp: new Date().toISOString(),
-                total: Object.values(userBets).reduce((a, b) => a + b, 0)
-            };
-            
-            // Сохранение в localStorage
-            localStorage.setItem('tot_user_bets', JSON.stringify(userBets));
-            
-            try {
-                // Здесь будет реальный запрос к API
-                // await fetch('https://api.example.com/save', {
-                //     method: 'POST',
-                //     headers: {'Content-Type': 'application/json'},
-                //     body: JSON.stringify(betData)
-                // });
+                let result;
+                if (existingBet) {
+                    // Обновляем существующую ставку
+                    result = await supabase
+                        .from('bets')
+                        .update(betData)
+                        .eq('user_id', userId);
+                } else {
+                    // Добавляем новую ставку
+                    result = await supabase
+                        .from('bets')
+                        .insert([betData]);
+                }
                 
-                console.log("Ставка сохранена:", betData);
-                updateCommunityStats();
-                showNotification("Ставка сохранена!");
+                if (result.error) throw result.error;
+                
+                // Обновляем статистику кандидатов
+                await updateCandidateStats();
+                
+                // Обновляем общую статистику
+                await updateGlobalStats();
+                
+                // Сохраняем локально
+                localStorage.setItem('tot_user_bets', JSON.stringify(userBets));
+                
+                showNotification('✅ Ставка успешно сохранена!');
+                
+                // Перезагружаем статистику
+                setTimeout(() => loadRealStats(), 1000);
+                
+                return true;
+                
             } catch (error) {
-                console.log("Ошибка сохранения:", error);
+                console.error('Ошибка сохранения:', error);
+                showNotification('❌ Ошибка сохранения ставки: ' + error.message);
+                return false;
             }
         }
 
-        // Показать уведомление
+        // Обновление статистики кандидатов
+        async function updateCandidateStats() {
+            try {
+                const { data: bets } = await supabase
+                    .from('bets')
+                    .select('bets');
+                
+                if (!bets || bets.length === 0) return;
+                
+                // Для каждого кандидата считаем среднее значение
+                for (const candidate of people) {
+                    let total = 0;
+                    let count = 0;
+                    
+                    bets.forEach(bet => {
+                        const value = bet.bets[candidate] || 0;
+                        if (value > 0) {
+                            total += value;
+                            count++;
+                        }
+                    });
+                    
+                    const average = count > 0 ? (total / count) : 0;
+                    
+                    // Обновляем в базе
+                    await supabase
+                        .from('candidate_stats')
+                        .update({
+                            total_votes: count,
+                            average_percentage: Math.round(average * 100) / 100
+                        })
+                        .eq('candidate_name', candidate);
+                }
+                
+            } catch (error) {
+                console.error('Ошибка обновления статистики кандидатов:', error);
+            }
+        }
+
+        // Обновление глобальной статистики
+        async function updateGlobalStats() {
+            try {
+                const { data: bets } = await supabase
+                    .from('bets')
+                    .select('user_id');
+                
+                const totalBets = bets?.length || 0;
+                const uniqueUsers = new Set(bets?.map(b => b.user_id)).size || 0;
+                
+                await supabase
+                    .from('global_stats')
+                    .update({
+                        total_bets: totalBets,
+                        active_users: uniqueUsers,
+                        last_updated: new Date().toISOString()
+                    })
+                    .eq('id', 1);
+                
+            } catch (error) {
+                console.error('Ошибка обновления глобальной статистики:', error);
+            }
+        }
+
+        // Построение таблицы лидеров
+        async function buildLeaderboard(bets) {
+            const leaderboardElement = document.getElementById('leaderboard');
+            
+            if (!bets || bets.length === 0) {
+                leaderboardElement.innerHTML = 
+                    '<div class="loading">Еще нет ставок. Будьте первым!</div>';
+                return;
+            }
+            
+            // Сортируем по очкам (score)
+            const sortedBets = [...bets].sort((a, b) => b.total_score - a.total_score);
+            leaderboardData = sortedBets;
+            
+            let html = '';
+            let myPosition = 0;
+            
+            // Ограничиваем 15 позициями
+            const displayBets = sortedBets.slice(0, 15);
+            
+            displayBets.forEach((bet, index) => {
+                const isMe = bet.user_id === userId;
+                const rankClass = index === 0 ? 'rank-1' : 
+                                index === 1 ? 'rank-2' : 
+                                index === 2 ? 'rank-3' : '';
+                
+                if (isMe) myPosition = index + 1;
+                
+                html += `
+                    <div class="leaderboard-item ${isMe ? 'me' : ''}">
+                        <div class="rank ${rankClass}">${index + 1}</div>
+                        <div class="user-name">${bet.user_name || 'Аноним'}</div>
+                        <div class="user-bet">${bet.top_choice}: ${bet.bets ? (bet.bets[bet.top_choice] || 0) : 0}%</div>
+                    </div>
+                `;
+            });
+            
+            leaderboardElement.innerHTML = html;
+            
+            // Показываем свою позицию
+            if (myPosition > 0) {
+                document.getElementById('yourPosition').textContent = myPosition;
+            } else if (Object.values(userBets).some(bet => bet > 0)) {
+                document.getElementById('yourPosition').textContent = "Не в топ-15";
+            } else {
+                document.getElementById('yourPosition').textContent = "-";
+            }
+            
+            // Добавляем кнопку "Показать всех" если есть еще ставки
+            if (sortedBets.length > 15) {
+                const showAllBtn = document.createElement('button');
+                showAllBtn.textContent = `Показать все (${sortedBets.length})`;
+                showAllBtn.style.cssText = 'width: 100%; margin-top: 10px; padding: 8px; background: #ecf0f1; border: none; border-radius: 5px; cursor: pointer;';
+                showAllBtn.onclick = () => openModal();
+                leaderboardElement.appendChild(showAllBtn);
+            }
+        }
+
+        // Демо-данные для тестирования
+        function showDemoData() {
+            communityStats.totalBets = 5;
+            communityStats.topCandidate = "Жилко";
+            communityStats.userCount = 5;
+            
+            document.getElementById('realTotalBets').textContent = '5';
+            document.getElementById('totalBets').textContent = '5';
+            document.getElementById('topCandidate').textContent = 'Жилко';
+            document.getElementById('userCount').textContent = 'Играют: 5 человек';
+            
+            // Демо таблица лидеров
+            const demoLeaderboard = [
+                { user_name: 'Алексей', top_choice: 'Жилко', bets: { 'Жилко': 25 } },
+                { user_name: 'Мария', top_choice: 'Биличенко', bets: { 'Биличенко': 20 } },
+                { user_name: 'Дмитрий', top_choice: 'Куликов', bets: { 'Куликов': 18 } }
+            ];
+            
+            let html = '';
+            demoLeaderboard.forEach((bet, index) => {
+                html += `
+                    <div class="leaderboard-item">
+                        <div class="rank ${index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : 'rank-3'}">${index + 1}</div>
+                        <div class="user-name">${bet.user_name}</div>
+                        <div class="user-bet">${bet.top_choice}: ${bet.bets[bet.top_choice]}%</div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('leaderboard').innerHTML = html;
+        }
+
+        // ========== ФУНКЦИИ UI ==========
+
+        function renderBettingArea() {
+            const bettingArea = document.getElementById('bettingArea');
+            bettingArea.innerHTML = '';
+            
+            people.forEach(person => {
+                const communityAvg = communityStats.candidateStats?.[person] || 0;
+                
+                const row = document.createElement('div');
+                row.className = 'person-row';
+                
+                row.innerHTML = `
+                    <div style="flex-grow: 1;">
+                        <div class="person-name">${person}</div>
+                        <div class="candidate-avg">Сообщество: ${communityAvg}%</div>
+                    </div>
+                    <input type="number" min="0" max="100" value="${userBets[person]}" 
+                           class="bet-input" data-person="${person}"
+                           oninput="updateBet('${person}', this.value)">
+                `;
+                
+                bettingArea.appendChild(row);
+            });
+        }
+
+        function updateBet(person, value) {
+            const numValue = parseInt(value) || 0;
+            const currentTotal = Object.values(userBets).reduce((a, b) => a + b, 0);
+            const newTotal = currentTotal - userBets[person] + numValue;
+            
+            if (newTotal > 100) {
+                const available = 100 - (currentTotal - userBets[person]);
+                alert(`Нельзя поставить больше 100 жетонов! Доступно: ${available}`);
+                const input = document.querySelector(`[data-person="${person}"]`);
+                input.value = userBets[person];
+                return;
+            }
+            
+            userBets[person] = numValue < 0 ? 0 : numValue;
+            updateTokensLeft();
+            
+            document.getElementById('saveBtn').classList.remove('hidden');
+            document.getElementById('shareBtn').classList.remove('hidden');
+        }
+
+        function updateTokensLeft() {
+            const usedTokens = Object.values(userBets).reduce((a, b) => a + b, 0);
+            const totalTokens = 100 - usedTokens;
+            document.getElementById('tokensLeft').textContent = totalTokens;
+            
+            const tokenElement = document.getElementById('tokensLeft');
+            tokenElement.style.color = totalTokens < 10 ? '#e74c3c' : 'white';
+        }
+
         function showNotification(message) {
             const notification = document.createElement('div');
             notification.textContent = message;
@@ -550,119 +1029,27 @@
                 border-radius: 8px;
                 z-index: 10000;
                 animation: slideIn 0.3s ease-out;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             `;
             document.body.appendChild(notification);
             setTimeout(() => notification.remove(), 3000);
         }
 
-        // Обновление статистики сообщества
-        function updateCommunityStats() {
-            document.getElementById('totalBets').textContent = communityBets.total || 0;
-            document.getElementById('topChoice').textContent = communityBets.topChoice || "-";
-            document.getElementById('userCount').textContent = `Играют: ${communityBets.userCount || 1} человек`;
-            
-            // Обновление топа сообщества
+        function updateCommunityUI() {
+            // Обновляем топ сообщества
             const communityTop = document.getElementById('communityTop');
-            if (communityBets.bets) {
-                communityTop.innerHTML = communityBets.bets
-                    .slice(0, 3)
-                    .map((bet, i) => `<li>${bet.name}: ${bet.choice} (${bet.score} баллов)</li>`)
+            if (communityStats.candidateStats) {
+                const sortedCandidates = Object.entries(communityStats.candidateStats)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 3);
+                
+                communityTop.innerHTML = sortedCandidates
+                    .map(([name, percentage], i) => 
+                        `<li>${name}: ${percentage}%</li>`)
                     .join('');
             }
         }
 
-        // Отрисовка области ставок
-        function renderBettingArea() {
-            const bettingArea = document.getElementById('bettingArea');
-            bettingArea.innerHTML = '';
-            
-            people.forEach(person => {
-                const row = document.createElement('div');
-                row.className = 'person-row';
-                
-                row.innerHTML = `
-                    <span class="person-name">${person}</span>
-                    <input type="number" min="0" max="100" value="${userBets[person]}" 
-                           class="bet-input" data-person="${person}"
-                           oninput="updateBet('${person}', this.value)">
-                `;
-                
-                bettingArea.appendChild(row);
-            });
-        }
-
-        // Обновление ставки
-        function updateBet(person, value) {
-            const numValue = parseInt(value) || 0;
-            const currentTotal = Object.values(userBets).reduce((a, b) => a + b, 0);
-            const newTotal = currentTotal - userBets[person] + numValue;
-            
-            if (newTotal > 100) {
-                alert(`Нельзя поставить больше 100 жетонов! У вас осталось ${100 - (currentTotal - userBets[person])} жетонов.`);
-                const input = document.querySelector(`[data-person="${person}"]`);
-                input.value = userBets[person];
-                return;
-            }
-            
-            userBets[person] = numValue < 0 ? 0 : numValue;
-            updateTokensLeft();
-            
-            // Показываем кнопки сохранения
-            document.getElementById('saveBtn').classList.remove('hidden');
-            document.getElementById('shareBtn').classList.remove('hidden');
-        }
-
-        // Обновление оставшихся жетонов
-        function updateTokensLeft() {
-            const usedTokens = Object.values(userBets).reduce((a, b) => a + b, 0);
-            const totalTokens = 100 - usedTokens;
-            document.getElementById('tokensLeft').textContent = totalTokens;
-            
-            const tokenElement = document.getElementById('tokensLeft');
-            tokenElement.style.color = totalTokens < 10 ? '#e74c3c' : 'white';
-        }
-
-        // Случайное распределение
-        function randomizeBets() {
-            people.forEach(person => userBets[person] = 0);
-            
-            let tokensLeft = 100;
-            const shuffledPeople = [...people].sort(() => Math.random() - 0.5);
-            
-            for (let i = 0; i < shuffledPeople.length - 1; i++) {
-                if (tokensLeft <= 0) break;
-                
-                if (i === shuffledPeople.length - 2) {
-                    userBets[shuffledPeople[i]] = tokensLeft;
-                    break;
-                }
-                
-                const maxForThisPerson = Math.min(Math.floor(tokensLeft / 2) + 1, tokensLeft);
-                const randomBet = Math.floor(Math.random() * maxForThisPerson);
-                userBets[shuffledPeople[i]] = randomBet;
-                tokensLeft -= randomBet;
-            }
-            
-            renderBettingArea();
-            updateTokensLeft();
-            document.getElementById('saveBtn').classList.remove('hidden');
-            document.getElementById('shareBtn').classList.remove('hidden');
-        }
-
-        // Сброс ставок
-        function resetBets() {
-            if (confirm("Сбросить все ставки?")) {
-                people.forEach(person => userBets[person] = 0);
-                renderBettingArea();
-                updateTokensLeft();
-                document.getElementById('results').classList.add('hidden');
-                document.getElementById('noResults').style.display = 'block';
-                document.getElementById('saveBtn').classList.add('hidden');
-                document.getElementById('shareBtn').classList.add('hidden');
-            }
-        }
-
-        // Показать результаты
         function showResults() {
             const usedTokens = Object.values(userBets).reduce((a, b) => a + b, 0);
             
@@ -697,8 +1084,7 @@
                 
                 const userBet = userBets[person];
                 const aiBet = aiPredictions[person];
-                // Имитация ставок сообщества
-                const communityBet = Math.floor(Math.random() * 20) + 1;
+                const communityBet = Math.round(communityStats.candidateStats?.[person] || 0);
                 
                 resultItem.innerHTML = `
                     <div style="flex-grow: 1;">
@@ -731,7 +1117,7 @@
                     winnerAnnouncement.innerHTML = `
                         <h3>🎉 По вашим ставкам первым уволится: <strong>${winners[0]}</strong></h3>
                         <p>AI согласен на ${aiPredictions[winners[0]]}%</p>
-                        <button onclick="saveBetToCloud()" style="width: 100%; margin-top: 10px; padding: 10px; background: #3498db; color: white; border: none; border-radius: 5px;">Сохранить мою ставку</button>
+                        <p>Сообщество ставит: ${Math.round(communityStats.candidateStats?.[winners[0]] || 0)}%</p>
                     `;
                 } else {
                     winnerAnnouncement.innerHTML = `
@@ -746,37 +1132,6 @@
             document.getElementById('noResults').style.display = 'none';
         }
 
-        // Поделиться результатами
-        function shareResults() {
-            const usedTokens = Object.values(userBets).reduce((a, b) => a + b, 0);
-            if (usedTokens !== 100) {
-                alert("Сначала сделайте полную ставку!");
-                return;
-            }
-            
-            // Определяем топ-3
-            const sorted = [...people].sort((a, b) => userBets[b] - userBets[a]);
-            const top3 = sorted.slice(0, 3);
-            
-            const shareText = `🎰 Мой прогноз, кто уволится в 2026:\n\n` +
-                             `🥇 ${top3[0]}: ${userBets[top3[0]]}%\n` +
-                             `🥈 ${top3[1]}: ${userBets[top3[1]]}%\n` +
-                             `🥉 ${top3[2]}: ${userBets[top3[2]]}%\n\n` +
-                             `Сделайте свой прогноз!`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Мой прогноз на увольнения в 2026',
-                    text: shareText,
-                    url: window.location.href
-                });
-            } else {
-                navigator.clipboard.writeText(shareText + '\n' + window.location.href);
-                showNotification("Результаты скопированы в буфер обмена!");
-            }
-        }
-
-        // Модальное окно
         function openModal() {
             document.getElementById('allBetsModal').style.display = 'flex';
             loadAllBets();
@@ -786,41 +1141,143 @@
             document.getElementById('allBetsModal').style.display = 'none';
         }
 
-        function loadAllBets() {
-            // Имитация загрузки
-            const allBetsList = document.getElementById('allBetsList');
-            allBetsList.innerHTML = `
-                <div class="community-item">
-                    <span>Игрок 1</span>
-                    <span>Жилко (85%)</span>
-                </div>
-                <div class="community-item">
-                    <span>Игрок 2</span>
-                    <span>Биличенко (92%)</span>
-                </div>
-                <div class="community-item">
-                    <span>${userName}</span>
-                    <span>${Object.keys(userBets).find(p => userBets[p] === Math.max(...Object.values(userBets)))} (${Math.max(...Object.values(userBets))}%)</span>
-                </div>
-            `;
+        async function loadAllBets() {
+            try {
+                const { data: bets, error } = await supabase
+                    .from('bets')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                const allBetsList = document.getElementById('allBetsList');
+                
+                if (!bets || bets.length === 0) {
+                    allBetsList.innerHTML = '<div class="loading">Еще нет ставок</div>';
+                    return;
+                }
+                
+                let html = '';
+                bets.forEach(bet => {
+                    const date = new Date(bet.created_at).toLocaleDateString('ru-RU');
+                    html += `
+                        <div class="community-item">
+                            <div>
+                                <strong>${bet.user_name}</strong><br>
+                                <small>${date}</small>
+                            </div>
+                            <div>
+                                ${bet.top_choice}: ${bet.bets[bet.top_choice]}%<br>
+                                <small>Очки: ${bet.total_score}</small>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                allBetsList.innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки всех ставок:', error);
+                document.getElementById('allBetsList').innerHTML = 
+                    '<div class="loading">Ошибка загрузки</div>';
+            }
         }
 
-        // Инициализация при загрузке
+        // ========== ОБРАБОТЧИКИ СОБЫТИЙ ==========
+
         document.addEventListener('DOMContentLoaded', () => {
             init();
             
-            document.getElementById('placeBet').addEventListener('click', showResults);
-            document.getElementById('randomBtn').addEventListener('click', randomizeBets);
-            document.getElementById('resetBtn').addEventListener('click', resetBets);
-            document.getElementById('saveBtn').addEventListener('click', saveBetToCloud);
-            document.getElementById('shareBtn').addEventListener('click', shareResults);
-            document.getElementById('viewAllBtn').addEventListener('click', openModal);
+            document.getElementById('placeBet').addEventListener('click', async () => {
+                const usedTokens = Object.values(userBets).reduce((a, b) => a + b, 0);
+                if (usedTokens !== 100) {
+                    alert('Распределите все 100 жетонов!');
+                    return;
+                }
+                
+                // Сохраняем ставку
+                const saved = await saveBetToDatabase();
+                if (saved) {
+                    // Показываем результаты
+                    showResults();
+                }
+            });
             
-            // Проверяем, если уже есть сохраненные ставки
-            if (Object.values(userBets).some(bet => bet > 0)) {
+            document.getElementById('randomBtn').addEventListener('click', () => {
+                people.forEach(person => userBets[person] = 0);
+                
+                let tokensLeft = 100;
+                const shuffledPeople = [...people].sort(() => Math.random() - 0.5);
+                
+                for (let i = 0; i < shuffledPeople.length - 1; i++) {
+                    if (tokensLeft <= 0) break;
+                    
+                    if (i === shuffledPeople.length - 2) {
+                        userBets[shuffledPeople[i]] = tokensLeft;
+                        break;
+                    }
+                    
+                    const maxForThisPerson = Math.min(Math.floor(tokensLeft / 2) + 1, tokensLeft);
+                    const randomBet = Math.floor(Math.random() * maxForThisPerson);
+                    userBets[shuffledPeople[i]] = randomBet;
+                    tokensLeft -= randomBet;
+                }
+                
+                renderBettingArea();
+                updateTokensLeft();
                 document.getElementById('saveBtn').classList.remove('hidden');
                 document.getElementById('shareBtn').classList.remove('hidden');
-            }
+            });
+            
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                if (confirm("Сбросить все ставки?")) {
+                    people.forEach(person => userBets[person] = 0);
+                    renderBettingArea();
+                    updateTokensLeft();
+                    document.getElementById('results').classList.add('hidden');
+                    document.getElementById('noResults').style.display = 'block';
+                    document.getElementById('saveBtn').classList.add('hidden');
+                    document.getElementById('shareBtn').classList.add('hidden');
+                }
+            });
+            
+            document.getElementById('saveBtn').addEventListener('click', saveBetToDatabase);
+            
+            document.getElementById('shareBtn').addEventListener('click', () => {
+                const usedTokens = Object.values(userBets).reduce((a, b) => a + b, 0);
+                if (usedTokens !== 100) {
+                    alert("Сначала сделайте полную ставку!");
+                    return;
+                }
+                
+                const sorted = [...people].sort((a, b) => userBets[b] - userBets[a]);
+                const top3 = sorted.slice(0, 3);
+                
+                const shareText = `🎰 Мой прогноз, кто уволится в 2026:\n\n` +
+                                 `🥇 ${top3[0]}: ${userBets[top3[0]]}%\n` +
+                                 `🥈 ${top3[1]}: ${userBets[top3[1]]}%\n` +
+                                 `🥉 ${top3[2]}: ${userBets[top3[2]]}%\n\n` +
+                                 `Всего ставок: ${communityStats.totalBets}\n` +
+                                 `Лидер сообщества: ${communityStats.topCandidate}\n\n` +
+                                 `Присоединяйтесь: ${window.location.href}`;
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Мой прогноз на увольнения в 2026',
+                        text: shareText,
+                        url: window.location.href
+                    });
+                } else if (window.Telegram?.WebApp) {
+                    window.Telegram.WebApp.sendData(JSON.stringify({
+                        action: 'share',
+                        text: shareText
+                    }));
+                } else {
+                    navigator.clipboard.writeText(shareText);
+                    showNotification('Результаты скопированы!');
+                }
+            });
+            
+            document.getElementById('viewAllBtn').addEventListener('click', openModal);
         });
 
         // Закрытие модального окна при клике вне его
