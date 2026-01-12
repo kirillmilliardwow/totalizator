@@ -3,432 +3,1117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎰 Тотализатор 2026 - Мультиплеер</title>
+    <title>🎭 Тотализатор Барокко 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Marcellus&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* БАРОККО СТИЛЬ */
         * {
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4E4A6;
+            --gold-dark: #B8860B;
+            --burgundy: #800020;
+            --burgundy-dark: #4A0012;
+            --velvet: #2C003E;
+            --cream: #FFF8E7;
+            --marble: #F5F5F5;
+            --shadow: rgba(0, 0, 0, 0.5);
         }
         
         body {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            margin: 0;
-            padding: 20px;
+            background: linear-gradient(135deg, var(--velvet) 0%, var(--burgundy-dark) 50%, #1A0014 100%);
             min-height: 100vh;
+            font-family: 'Marcellus', serif;
+            color: var(--cream);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(128, 0, 32, 0.1) 0%, transparent 20%),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d4af37' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+        
+        .baroque-frame {
+            position: relative;
+            border: 3px solid var(--gold);
+            border-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L100,0 L100,100 L0,100 Z' fill='none' stroke='%23D4AF37' stroke-width='3' stroke-dasharray='10,5'/%3E%3C/svg%3E") 30 stretch;
+            background: linear-gradient(145deg, rgba(44, 0, 62, 0.9) 0%, rgba(74, 0, 18, 0.9) 100%);
+            box-shadow: 
+                0 0 40px rgba(212, 175, 55, 0.3),
+                inset 0 0 30px rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+        }
+        
+        .baroque-frame::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            pointer-events: none;
+        }
+        
+        .ornament {
+            position: absolute;
+            font-size: 2rem;
+            color: var(--gold);
+            opacity: 0.3;
+            z-index: 1;
+        }
+        
+        .ornament.top-left {
+            top: 10px;
+            left: 10px;
+        }
+        
+        .ornament.top-right {
+            top: 10px;
+            right: 10px;
+            transform: scaleX(-1);
+        }
+        
+        .ornament.bottom-left {
+            bottom: 10px;
+            left: 10px;
+            transform: scaleY(-1);
+        }
+        
+        .ornament.bottom-right {
+            bottom: 10px;
+            right: 10px;
+            transform: scale(-1, -1);
         }
         
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 30px;
+            position: relative;
+            z-index: 2;
         }
         
+        /* ЗАГОЛОВОК В СТИЛЕ БАРОККО */
         .header {
             text-align: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
+            position: relative;
+            padding: 30px 0;
         }
         
-        h1 {
-            color: #333;
-            margin: 0;
+        .header::before, .header::after {
+            content: "✦";
+            position: absolute;
+            font-size: 2.5rem;
+            color: var(--gold);
+            top: 0;
+            opacity: 0.7;
         }
         
-        .status {
-            text-align: center;
-            padding: 10px;
-            background: #e8f4fc;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #3498db;
+        .header::before {
+            left: 20%;
         }
         
-        .stats {
+        .header::after {
+            right: 20%;
+        }
+        
+        .main-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-shadow: 
+                0 0 10px rgba(212, 175, 55, 0.5),
+                0 0 20px rgba(212, 175, 55, 0.3),
+                2px 2px 4px var(--shadow);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .main-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--gold-light);
+            font-style: italic;
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+        
+        /* КАРТЫ СТАТИСТИКИ */
+        .stats-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
         
-        .stat {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
+        .stat-card {
+            background: linear-gradient(145deg, rgba(26, 0, 20, 0.8) 0%, rgba(74, 0, 18, 0.8) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 25px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+        
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--gold), var(--burgundy), var(--gold));
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+            display: block;
         }
         
         .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
-        }
-        
-        .tokens {
-            background: #667eea;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        #tokensLeft {
-            font-size: 3em;
-            font-weight: bold;
-            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
             margin: 10px 0;
         }
         
-        .candidate {
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--gold-light);
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+        
+        /* СЧЕТЧИК ЖЕТОНОВ */
+        .token-counter {
+            background: linear-gradient(145deg, rgba(26, 0, 20, 0.9) 0%, rgba(44, 0, 62, 0.9) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .token-counter::before {
+            content: "⚜️";
+            position: absolute;
+            font-size: 10rem;
+            top: -30px;
+            left: -30px;
+            opacity: 0.1;
+            transform: rotate(-15deg);
+        }
+        
+        .token-counter::after {
+            content: "⚜️";
+            position: absolute;
+            font-size: 10rem;
+            bottom: -30px;
+            right: -30px;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+        
+        .token-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--gold-light);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        #tokensLeft {
+            font-family: 'Cinzel', serif;
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-shadow: 
+                0 0 20px rgba(212, 175, 55, 0.7),
+                0 0 40px rgba(212, 175, 55, 0.4);
+            display: block;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* КАРТОЧКИ КАНДИДАТОВ */
+        .candidates-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .candidates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .candidate-card {
+            background: linear-gradient(145deg, rgba(26, 0, 20, 0.8) 0%, rgba(44, 0, 62, 0.8) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .candidate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+            border-color: var(--gold-light);
+        }
+        
+        .candidate-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(212, 175, 55, 0.05) 50%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .candidate-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            margin-bottom: 10px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 5px solid #667eea;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
         }
         
         .candidate-name {
-            font-weight: bold;
-            font-size: 1.1em;
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            color: var(--gold);
+            font-weight: 700;
         }
         
-        input[type="number"] {
-            width: 80px;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-        
-        .buttons {
+        .candidate-rank {
+            background: var(--burgundy);
+            color: var(--gold);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        
-        button {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            min-width: 180px;
-        }
-        
-        .btn-save {
-            background: #2ecc71;
-            color: white;
-        }
-        
-        .btn-random {
-            background: #3498db;
-            color: white;
-        }
-        
-        .btn-reset {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .leaderboard {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-        
-        .player {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            margin-bottom: 8px;
-            background: white;
-            border-radius: 8px;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 2px solid var(--gold);
         }
         
-        .player-you {
-            background: #e8f4fc;
-            border-left: 4px solid #3498db;
+        .bet-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
         }
         
+        .bet-value-display {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-weight: 700;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .bet-btn {
+            background: linear-gradient(145deg, var(--burgundy), var(--burgundy-dark));
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .bet-btn:hover {
+            background: linear-gradient(145deg, var(--gold-dark), var(--gold));
+            color: var(--burgundy-dark);
+            transform: scale(1.1);
+        }
+        
+        /* КНОПКИ УПРАВЛЕНИЯ */
+        .controls-section {
+            margin-bottom: 40px;
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .control-btn {
+            background: linear-gradient(145deg, var(--burgundy), var(--burgundy-dark));
+            border: 3px solid var(--gold);
+            border-radius: 15px;
+            padding: 25px 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .control-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        
+        .control-btn:hover::before {
+            left: 100%;
+        }
+        
+        .control-btn:hover {
+            background: linear-gradient(145deg, var(--gold-dark), var(--gold));
+            color: var(--burgundy-dark);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+        
+        .btn-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        /* ТАБЛИЦА ЛИДЕРОВ */
+        .leaderboard-section {
+            margin-bottom: 40px;
+        }
+        
+        .leaderboard-container {
+            background: linear-gradient(145deg, rgba(26, 0, 20, 0.9) 0%, rgba(44, 0, 62, 0.9) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 25px;
+            max-height: 400px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .leaderboard-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .leaderboard-container::-webkit-scrollbar-track {
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 10px;
+        }
+        
+        .leaderboard-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--gold), var(--gold-dark));
+            border-radius: 10px;
+        }
+        
+        .leaderboard-header {
+            display: grid;
+            grid-template-columns: 1fr 3fr 2fr;
+            padding: 15px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 1.1rem;
+            border-bottom: 2px solid var(--gold);
+        }
+        
+        .leaderboard-item {
+            display: grid;
+            grid-template-columns: 1fr 3fr 2fr;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .leaderboard-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .leaderboard-item.you {
+            background: rgba(212, 175, 55, 0.15);
+            border-left-color: var(--gold);
+        }
+        
+        .rank {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+        }
+        
+        .rank-1 { color: #FFD700; }
+        .rank-2 { color: #C0C0C0; }
+        .rank-3 { color: #CD7F32; }
+        
+        .player-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .player-name {
+            font-weight: 700;
+            color: var(--gold-light);
+            font-size: 1.1rem;
+        }
+        
+        .player-time {
+            font-size: 0.9rem;
+            color: rgba(255, 248, 231, 0.6);
+        }
+        
+        .player-bet {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--gold);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        /* ФУТЕР */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 2px solid rgba(212, 175, 55, 0.3);
+            margin-top: 40px;
+            color: var(--gold-light);
+            font-size: 0.9rem;
+            position: relative;
+        }
+        
+        .footer::before {
+            content: "⚜️";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--velvet);
+            padding: 0 20px;
+            font-size: 1.5rem;
+        }
+        
+        /* УВЕДОМЛЕНИЯ */
         .notification {
             position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(145deg, var(--burgundy), var(--burgundy-dark));
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 20px 25px;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: slideInRight 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .notification-icon {
+            font-size: 1.8rem;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        /* СТАТУС ПОДКЛЮЧЕНИЯ */
+        .connection-status {
+            position: fixed;
             top: 20px;
-            right: 20px;
-            background: #2ecc71;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            animation: slideIn 0.3s, slideOut 0.3s 2.7s forwards;
+            left: 20px;
+            background: rgba(26, 0, 20, 0.9);
+            border: 2px solid var(--gold);
+            border-radius: 50px;
+            padding: 10px 20px;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
         }
         
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
+        .status-online {
+            background: #00FF00;
+            box-shadow: 0 0 10px #00FF00;
         }
         
-        @media (max-width: 600px) {
-            .stats {
+        .status-offline {
+            background: #FF0000;
+            box-shadow: 0 0 10px #FF0000;
+        }
+        
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 15px auto;
+            }
+            
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .candidates-grid {
                 grid-template-columns: 1fr;
             }
             
-            button {
-                min-width: 100%;
+            .controls-grid {
+                grid-template-columns: 1fr;
             }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            #tokensLeft {
+                font-size: 4rem;
+            }
+        }
+        
+        /* АНИМАЦИЯ ЗОЛОТОГО БЛЕСКА */
+        @keyframes goldShine {
+            0% { background-position: -100px; }
+            100% { background-position: 200px; }
+        }
+        
+        .gold-shine {
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(212, 175, 55, 0.2), 
+                rgba(212, 175, 55, 0.4), 
+                rgba(212, 175, 55, 0.2), 
+                transparent);
+            background-size: 200px 100%;
+            animation: goldShine 3s infinite;
+        }
+        
+        /* МОДАЛЬНОЕ ОКНО */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, var(--velvet), var(--burgundy-dark));
+            border: 3px solid var(--gold);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalAppear 0.5s ease;
+        }
+        
+        @keyframes modalAppear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            transform: scale(1.2);
         }
     </style>
 </head>
 <body>
+    <!-- Статус подключения -->
+    <div class="connection-status">
+        <span class="status-dot status-online"></span>
+        <span id="statusText">Мультиплеер активен</span>
+    </div>
+    
+    <!-- Основной контейнер -->
     <div class="container">
-        <div class="header">
-            <h1>🎰 Тотализатор 2026</h1>
-            <p>Ставьте жетоны и смотрите ставки других игроков!</p>
-        </div>
+        <!-- Декоративные элементы -->
+        <div class="ornament top-left">❖</div>
+        <div class="ornament top-right">❖</div>
+        <div class="ornament bottom-left">❖</div>
+        <div class="ornament bottom-right">❖</div>
         
-        <div class="status">
-            <strong>⚡ МУЛЬТИПЛЕЕР РАБОТАЕТ</strong><br>
-            <span id="statusText">Загрузка данных...</span>
-        </div>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value" id="totalBets">0</div>
-                <div>Всего ставок</div>
+        <!-- Рамка в стиле барокко -->
+        <div class="baroque-frame">
+            <!-- Шапка -->
+            <div class="header">
+                <h1 class="main-title">🎭 ТОТАЛИЗАТОР БАРОККО</h1>
+                <div class="subtitle">Кто первый оставит трон в 2026 году?</div>
             </div>
-            <div class="stat">
-                <div class="stat-value" id="topChoice">-</div>
-                <div>Лидер</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="activePlayers">1</div>
-                <div>Игроков</div>
-            </div>
-        </div>
-        
-        <div class="tokens">
-            <div>Осталось жетонов</div>
-            <div id="tokensLeft">100</div>
-            <div>из 100 возможных</div>
-        </div>
-        
-        <div id="candidates">
-            <!-- Список кандидатов появится здесь -->
-        </div>
-        
-        <div class="buttons">
-            <button class="btn-save" id="saveBtn">✅ Сохранить ставку</button>
-            <button class="btn-random" id="randomBtn">🎲 Случайно</button>
-            <button class="btn-reset" id="resetBtn">🔄 Сбросить</button>
-        </div>
-        
-        <div class="leaderboard">
-            <h3>👥 Ставки других игроков:</h3>
-            <div id="playersList">
-                <div style="text-align: center; padding: 20px;">
-                    Загрузка...
+            
+            <!-- Статистика -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="totalBets">0</div>
+                    <div class="stat-label">Всего ставок</div>
                 </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">👑</div>
+                    <div class="stat-value" id="topChoice">-</div>
+                    <div class="stat-label">Лидер двора</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="activePlayers">1</div>
+                    <div class="stat-label">Игроков при дворе</div>
+                </div>
+            </div>
+            
+            <!-- Счетчик жетонов -->
+            <div class="token-counter">
+                <div class="token-title">Остаток королевских жетонов</div>
+                <div id="tokensLeft">100</div>
+                <div class="stat-label">из 100 дарованных</div>
+            </div>
+            
+            <!-- Кандидаты -->
+            <div class="candidates-section">
+                <h2 class="section-title">👑 Претенденты на увольнение</h2>
+                <div class="candidates-grid" id="candidatesList">
+                    <!-- Кандидаты загрузятся здесь -->
+                </div>
+            </div>
+            
+            <!-- Управление -->
+            <div class="controls-section">
+                <h2 class="section-title">⚔️ Управление ставками</h2>
+                <div class="controls-grid">
+                    <button class="control-btn" id="saveBtn">
+                        <div class="btn-icon">💾</div>
+                        <div>Сохранить ставку</div>
+                    </button>
+                    
+                    <button class="control-btn" id="randomBtn">
+                        <div class="btn-icon">🎲</div>
+                        <div>Случайное распределение</div>
+                    </button>
+                    
+                    <button class="control-btn" id="resetBtn">
+                        <div class="btn-icon">🔄</div>
+                        <div>Сбросить все</div>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Таблица лидеров -->
+            <div class="leaderboard-section">
+                <h2 class="section-title">🏆 Таблица придворных</h2>
+                <div class="leaderboard-container">
+                    <div class="leaderboard-header">
+                        <div>Ранг</div>
+                        <div>Игрок</div>
+                        <div style="text-align: right;">Главная ставка</div>
+                    </div>
+                    <div id="leaderboardContent">
+                        <!-- Лидеры загрузятся здесь -->
+                        <div style="text-align: center; padding: 40px; color: rgba(212, 175, 55, 0.7);">
+                            Загрузка данных о придворных...
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Футер -->
+            <div class="footer">
+                <div>© 2024 Дворцовый тотализатор. Все права защищены.</div>
+                <div style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">
+                    Игра королевского двора. Результаты будут объявлены в канун 2027 года.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для всех ставок -->
+    <div class="modal" id="allBetsModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h2 style="color: var(--gold); margin-bottom: 20px; font-family: 'Cinzel', serif;">📜 Все ставки двора</h2>
+            <div id="allBetsList" style="max-height: 400px; overflow-y: auto;">
+                <!-- Все ставки загрузятся здесь -->
             </div>
         </div>
     </div>
 
     <script>
-        // ========== ПРОСТАЯ СИСТЕМА МУЛЬТИПЛЕЕРА ==========
-        // Используем Supabase как базу данных
+        // ========== БАРОККО МУЛЬТИПЛЕЕР ==========
+        // Используем Supabase для настоящего мультиплеера
         
-        // Ваши ключи Supabase
         const SUPABASE_URL = 'https://emsdxguafvggifztgeks.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_hhEWBsXgWr_TTC9rFp7Qfg_SfuD6bYl';
         
         // Инициализируем Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-        // Список кандидатов
-        const candidates = [
+        // Список кандидатов (придворных)
+        const courtiers = [
             "Подвалкова", "Сапьяная", "Попов", "Балыкина", "Биличенко", 
             "Куликов", "Дегтерева", "Тягина", "Королева", "Жилко", 
             "Туркина", "Буркова", "Юрчихина"
         ];
         
-        // Данные текущего пользователя
-        let myBets = {};
-        let myName = '';
-        let myId = '';
+        // Данные игрока
+        let playerBets = {};
+        let playerName = '';
+        let playerId = '';
         
-        // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        async function init() {
-            console.log('🚀 Запуск мультиплеера...');
-            
-            // 1. Загружаем мои данные
-            loadMyData();
-            
-            // 2. Запрашиваем имя
-            await askName();
-            
-            // 3. Показываем кандидатов
-            showCandidates();
-            
-            // 4. Подключаемся к базе данных
-            await connectToDatabase();
-            
-            // 5. Загружаем ставки всех игроков
-            await loadAllBets();
-            
-            console.log('✅ Мультиплеер готов!');
-        }
+        // Статистика двора
+        let courtStats = {
+            totalBets: 0,
+            topChoice: '',
+            activePlayers: 0,
+            allBets: []
+        };
         
-        function loadMyData() {
-            // Загружаем мои предыдущие ставки
-            const saved = localStorage.getItem('my_bets');
-            if (saved) {
-                myBets = JSON.parse(saved);
+        // ========== ИНИЦИАЛИЗАЦИЯ ДВОРА ==========
+        async function initializeCourt() {
+            console.log('🎭 Инициализация королевского двора...');
+            
+            // Загружаем данные игрока
+            loadPlayerData();
+            
+            // Запрашиваем имя игрока
+            await askPlayerName();
+            
+            // Отображаем претендентов
+            displayCourtiers();
+            
+            // Подключаемся к королевским архивам (Supabase)
+            const connected = await connectToRoyalArchives();
+            
+            if (connected) {
+                // Загружаем данные двора
+                await loadCourtData();
+                
+                // Начинаем слушать обновления
+                listenForUpdates();
+                
+                // Автообновление каждые 30 секунд
+                setInterval(loadCourtData, 30000);
             } else {
-                // Ставим всем 0
-                candidates.forEach(c => myBets[c] = 0);
+                // Показываем демо-данные
+                showRoyalDemo();
             }
             
-            // Создаем уникальный ID
-            myId = localStorage.getItem('my_id');
-            if (!myId) {
-                myId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('my_id', myId);
+            console.log('✅ Двор готов к приему ставок!');
+        }
+        
+        function loadPlayerData() {
+            // Загружаем предыдущие ставки игрока
+            const savedBets = localStorage.getItem('royal_bets');
+            if (savedBets) {
+                playerBets = JSON.parse(savedBets);
+            } else {
+                // Инициализируем нулевые ставки
+                courtiers.forEach(courtier => {
+                    playerBets[courtier] = 0;
+                });
+            }
+            
+            // Создаем королевский ID
+            playerId = localStorage.getItem('royal_id');
+            if (!playerId) {
+                playerId = 'royal_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('royal_id', playerId);
             }
         }
         
-        async function askName() {
-            myName = localStorage.getItem('my_name');
+        async function askPlayerName() {
+            playerName = localStorage.getItem('royal_name');
             
-            if (!myName) {
-                // Ждем немного, чтобы страница загрузилась
-                setTimeout(async () => {
-                    const name = prompt("Введите ваше имя для таблицы игроков:", 
-                                      "Игрок_" + Math.floor(Math.random() * 1000));
-                    if (name) {
-                        myName = name;
-                        localStorage.setItem('my_name', myName);
-                        showMessage(`Привет, ${myName}!`);
+            if (!playerName) {
+                // Если в Telegram, используем данные Telegram
+                if (window.Telegram?.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    const user = tg.initDataUnsafe?.user;
+                    if (user) {
+                        playerName = user.first_name || user.username || 'Придворный';
+                        localStorage.setItem('royal_name', playerName);
                     }
-                }, 500);
+                }
+                
+                // Если не в Telegram, спрашиваем имя
+                if (!playerName) {
+                    setTimeout(() => {
+                        const name = prompt("Введите ваше королевское имя для двора:", 
+                                          "Придворный_" + Math.floor(Math.random() * 1000));
+                        if (name) {
+                            playerName = name;
+                            localStorage.setItem('royal_name', playerName);
+                            showRoyalNotification(`👑 Добро пожаловать, ${playerName}!`);
+                        }
+                    }, 1000);
+                }
             }
         }
         
-        function showCandidates() {
-            const container = document.getElementById('candidates');
+        function displayCourtiers() {
+            const container = document.getElementById('candidatesList');
             let html = '';
             
-            candidates.forEach(candidate => {
-                const value = myBets[candidate] || 0;
+            courtiers.forEach((courtier, index) => {
+                const betValue = playerBets[courtier] || 0;
+                const rank = index + 1;
                 
                 html += `
-                    <div class="candidate">
-                        <div class="candidate-name">${candidate}</div>
-                        <div>
-                            <input type="number" 
-                                   value="${value}"
-                                   min="0" 
-                                   max="100"
-                                   oninput="updateMyBet('${candidate}', this.value)"
-                                   style="width: 80px;">
+                    <div class="candidate-card">
+                        <div class="candidate-header">
+                            <div class="candidate-name">${courtier}</div>
+                            <div class="candidate-rank">${rank}</div>
+                        </div>
+                        <div class="bet-controls">
+                            <button class="bet-btn" onclick="changeBet('${courtier}', -5)">−</button>
+                            <div class="bet-value-display">${betValue}</div>
+                            <button class="bet-btn" onclick="changeBet('${courtier}', 5)">+</button>
                         </div>
                     </div>
                 `;
             });
             
             container.innerHTML = html;
-            updateTokens();
+            updateRoyalTokens();
         }
         
-        function updateMyBet(candidate, value) {
-            const num = parseInt(value) || 0;
-            const total = Object.values(myBets).reduce((a, b) => a + b, 0);
-            const oldValue = myBets[candidate] || 0;
-            const newTotal = total - oldValue + num;
+        function changeBet(courtier, delta) {
+            const current = playerBets[courtier] || 0;
+            const newValue = Math.max(0, Math.min(100, current + delta));
+            const total = Object.values(playerBets).reduce((a, b) => a + b, 0);
+            const previous = playerBets[courtier] || 0;
+            const newTotal = total - previous + newValue;
             
             if (newTotal > 100) {
-                const left = 100 - (total - oldValue);
-                alert(`Можно поставить максимум ${left} жетонов на этого кандидата!`);
+                const available = 100 - (total - previous);
+                showRoyalNotification(`👑 Не более ${available} жетонов на этого претендента!`);
                 return;
             }
             
-            myBets[candidate] = num;
-            localStorage.setItem('my_bets', JSON.stringify(myBets));
-            updateTokens();
-        }
-        
-        function updateTokens() {
-            const used = Object.values(myBets).reduce((a, b) => a + b, 0);
-            const left = 100 - used;
+            playerBets[courtier] = newValue;
+            localStorage.setItem('royal_bets', JSON.stringify(playerBets));
+            displayCourtiers(); // Обновляем отображение
             
-            document.getElementById('tokensLeft').textContent = left;
-            
-            if (left < 0) {
-                document.getElementById('tokensLeft').style.color = '#e74c3c';
-            } else if (left < 20) {
-                document.getElementById('tokensLeft').style.color = '#f39c12';
-            } else {
-                document.getElementById('tokensLeft').style.color = 'white';
+            // Анимация изменения
+            const cards = document.querySelectorAll('.candidate-card');
+            const index = courtiers.indexOf(courtier);
+            if (cards[index]) {
+                cards[index].classList.add('gold-shine');
+                setTimeout(() => cards[index].classList.remove('gold-shine'), 1000);
             }
         }
         
-        async function connectToDatabase() {
+        function updateRoyalTokens() {
+            const used = Object.values(playerBets).reduce((a, b) => a + b, 0);
+            const left = 100 - used;
+            const tokenElement = document.getElementById('tokensLeft');
+            
+            // Анимация изменения
+            tokenElement.style.transform = 'scale(1.2)';
+            setTimeout(() => tokenElement.style.transform = 'scale(1)', 300);
+            
+            tokenElement.textContent = left;
+            
+            // Изменяем цвет в зависимости от остатка
+            if (left < 0) {
+                tokenElement.style.color = '#FF6B6B';
+            } else if (left < 20) {
+                tokenElement.style.color = '#FFD166';
+            } else {
+                tokenElement.style.color = '#D4AF37';
+            }
+        }
+        
+        async function connectToRoyalArchives() {
             try {
-                document.getElementById('statusText').textContent = 'Подключение к базе данных...';
+                document.getElementById('statusText').textContent = 'Подключение к архивам...';
                 
-                // Проверяем подключение
+                // Проверяем подключение к Supabase
                 const { data, error } = await supabase
                     .from('bets')
                     .select('count', { count: 'exact', head: true })
                     .limit(1);
                 
                 if (error) {
-                    console.log('База данных не отвечает, создаем таблицу...');
-                    await createTable();
+                    console.log('Архивы не отвечают, проверяем таблицы...');
+                    await checkRoyalTables();
                 }
                 
-                document.getElementById('statusText').textContent = '✅ Подключено! Видите других игроков ниже ↓';
+                document.getElementById('statusText').textContent = 'Мультиплеер активен';
+                return true;
                 
             } catch (error) {
-                console.error('Ошибка подключения:', error);
-                document.getElementById('statusText').textContent = '⚠️ Используется локальный режим';
+                console.error('Ошибка подключения к архивам:', error);
+                document.getElementById('statusText').textContent = 'Локальный режим';
+                return false;
             }
         }
         
-        async function createTable() {
+        async function checkRoyalTables() {
             try {
-                // Создаем таблицу через SQL
-                const { error } = await supabase.rpc('create_bets_table_if_not_exists');
+                // Простой запрос для проверки таблицы
+                const { error } = await supabase
+                    .from('bets')
+                    .select('id')
+                    .limit(1);
                 
-                if (error) {
-                    // Если функция не существует, пробуем другой способ
-                    console.log('Пытаемся создать таблицу другим способом...');
+                if (error && error.message.includes('does not exist')) {
+                    showRoyalNotification('📜 Создаем королевские архивы...');
                 }
             } catch (e) {
-                console.log('Не удалось создать таблицу автоматически');
+                console.log('Не удалось проверить таблицы архива');
             }
         }
         
-        async function loadAllBets() {
+        async function loadCourtData() {
             try {
-                // Получаем ВСЕ ставки из базы
+                // Получаем все ставки из королевских архивов
                 const { data: allBets, error } = await supabase
                     .from('bets')
                     .select('*')
@@ -436,81 +1121,81 @@
                 
                 if (error) throw error;
                 
-                // Обновляем статистику
-                updateStats(allBets || []);
+                courtStats.allBets = allBets || [];
+                courtStats.totalBets = allBets?.length || 0;
+                courtStats.activePlayers = new Set(allBets?.map(b => b.user_id)).size || 0;
                 
-                // Показываем список игроков
-                showPlayers(allBets || []);
+                // Находим фаворита двора
+                const favorCounts = {};
+                allBets?.forEach(bet => {
+                    if (bet.top_choice) {
+                        favorCounts[bet.top_choice] = (favorCounts[bet.top_choice] || 0) + 1;
+                    }
+                });
+                
+                let topChoice = '';
+                let maxFavor = 0;
+                Object.keys(favorCounts).forEach(choice => {
+                    if (favorCounts[choice] > maxFavor) {
+                        maxFavor = favorCounts[choice];
+                        topChoice = choice;
+                    }
+                });
+                
+                courtStats.topChoice = topChoice;
+                
+                // Обновляем королевскую статистику
+                updateCourtStats();
+                
+                // Показываем придворных
+                displayCourtiersList();
                 
             } catch (error) {
-                console.error('Ошибка загрузки ставок:', error);
-                
-                // Показываем демо-данные
-                showDemoData();
+                console.error('Ошибка загрузки данных двора:', error);
+                // Используем демо-данные
+                showRoyalDemo();
             }
         }
         
-        function updateStats(allBets) {
-            // Общее количество ставок
-            document.getElementById('totalBets').textContent = allBets.length;
-            
-            // Количество уникальных игроков
-            const uniquePlayers = new Set(allBets.map(b => b.user_id)).size;
-            document.getElementById('activePlayers').textContent = uniquePlayers || 1;
-            
-            // Самый популярный кандидат
-            const votes = {};
-            allBets.forEach(bet => {
-                if (bet.top_choice) {
-                    votes[bet.top_choice] = (votes[bet.top_choice] || 0) + 1;
-                }
-            });
-            
-            let topChoice = '';
-            let maxVotes = 0;
-            Object.keys(votes).forEach(candidate => {
-                if (votes[candidate] > maxVotes) {
-                    maxVotes = votes[candidate];
-                    topChoice = candidate;
-                }
-            });
-            
-            document.getElementById('topChoice').textContent = topChoice || 'Нет данных';
+        function updateCourtStats() {
+            document.getElementById('totalBets').textContent = courtStats.totalBets;
+            document.getElementById('topChoice').textContent = courtStats.topChoice || 'Нет фаворита';
+            document.getElementById('activePlayers').textContent = courtStats.activePlayers;
         }
         
-        function showPlayers(allBets) {
-            const container = document.getElementById('playersList');
+        function displayCourtiersList() {
+            const container = document.getElementById('leaderboardContent');
             
-            if (!allBets || allBets.length === 0) {
+            if (!courtStats.allBets || courtStats.allBets.length === 0) {
                 container.innerHTML = `
-                    <div style="text-align: center; padding: 20px; color: #666;">
-                        Ставок пока нет. Будьте первым! 🏆
+                    <div style="text-align: center; padding: 40px; color: rgba(212, 175, 55, 0.7);">
+                        🏰 Двор пуст. Будьте первым придворным!
                     </div>
                 `;
                 return;
             }
             
+            // Берем последние 10 ставок
+            const recentBets = courtStats.allBets.slice(0, 10);
+            
             let html = '';
-            
-            // Берем последние 15 ставок
-            const recentBets = allBets.slice(0, 15);
-            
-            recentBets.forEach(bet => {
-                const isMe = bet.user_id === myId;
+            recentBets.forEach((bet, index) => {
+                const isYou = bet.user_id === playerId;
                 const time = new Date(bet.created_at).toLocaleTimeString('ru-RU', {
                     hour: '2-digit',
                     minute: '2-digit'
                 });
                 
+                const rankClass = index < 3 ? `rank-${index + 1}` : '';
+                
                 html += `
-                    <div class="player ${isMe ? 'player-you' : ''}">
-                        <div>
-                            <strong>${bet.user_name || 'Аноним'}</strong>
-                            <div style="font-size: 0.9em; color: #666;">${time}</div>
+                    <div class="leaderboard-item ${isYou ? 'you' : ''}">
+                        <div class="rank ${rankClass}">${index + 1}</div>
+                        <div class="player-info">
+                            <div class="player-name">${bet.user_name || 'Анонимный придворный'} ${isYou ? '(Вы)' : ''}</div>
+                            <div class="player-time">${time}</div>
                         </div>
-                        <div style="font-weight: bold; color: #667eea;">
-                            ${bet.top_choice}: ${bet.bets[bet.top_choice] || 0}%
-                        </div>
+                        <div class="player-bet">${bet.top_choice}: ${bet.bets[bet.top_choice] || 0}%</div>
                     </div>
                 `;
             });
@@ -518,21 +1203,21 @@
             container.innerHTML = html;
         }
         
-        async function saveMyBet() {
-            const total = Object.values(myBets).reduce((a, b) => a + b, 0);
+        async function saveRoyalBet() {
+            const total = Object.values(playerBets).reduce((a, b) => a + b, 0);
             
             if (total !== 100) {
-                showMessage(`Нужно распределить ровно 100 жетонов! Сейчас: ${total}`);
+                showRoyalNotification(`👑 Нужно распределить ровно 100 жетонов! Сейчас: ${total}`);
                 return;
             }
             
-            if (!myName) {
-                const name = prompt("Введите ваше имя:");
+            if (!playerName) {
+                const name = prompt("Введите ваше королевское имя:");
                 if (name) {
-                    myName = name;
-                    localStorage.setItem('my_name', myName);
+                    playerName = name;
+                    localStorage.setItem('royal_name', playerName);
                 } else {
-                    showMessage("Без имени нельзя сохранить ставку");
+                    showRoyalNotification("👑 Без имени нельзя сделать ставку!");
                     return;
                 }
             }
@@ -540,21 +1225,21 @@
             // Находим главную ставку
             let mainChoice = '';
             let maxBet = 0;
-            Object.keys(myBets).forEach(candidate => {
-                if (myBets[candidate] > maxBet) {
-                    maxBet = myBets[candidate];
-                    mainChoice = candidate;
+            Object.keys(playerBets).forEach(courtier => {
+                if (playerBets[courtier] > maxBet) {
+                    maxBet = playerBets[courtier];
+                    mainChoice = courtier;
                 }
             });
             
             try {
-                // Сохраняем в Supabase
+                // Сохраняем в королевские архивы
                 const { error } = await supabase
                     .from('bets')
                     .upsert({
-                        user_id: myId,
-                        user_name: myName,
-                        bets: myBets,
+                        user_id: playerId,
+                        user_name: playerName,
+                        bets: playerBets,
                         top_choice: mainChoice,
                         created_at: new Date().toISOString()
                     }, {
@@ -563,88 +1248,231 @@
                 
                 if (error) throw error;
                 
-                showMessage('✅ Ваша ставка сохранена!');
+                // Анимация успешного сохранения
+                createRoyalConfetti();
+                showRoyalNotification('👑 Ваша ставка записана в королевские архивы!');
                 
-                // Обновляем список игроков
-                setTimeout(() => loadAllBets(), 1000);
+                // Обновляем данные двора
+                setTimeout(() => loadCourtData(), 1500);
                 
             } catch (error) {
-                console.error('Ошибка сохранения:', error);
-                showMessage('❌ Не удалось сохранить. Попробуйте еще раз.');
+                console.error('Ошибка сохранения в архивы:', error);
+                showRoyalNotification('⚠️ Не удалось сохранить. Попробуйте позже.');
+                
+                // Сохраняем локально
+                const localBets = JSON.parse(localStorage.getItem('local_royal_bets') || '[]');
+                localBets.push({
+                    user_id: playerId,
+                    user_name: playerName,
+                    bets: playerBets,
+                    top_choice: mainChoice,
+                    created_at: new Date().toISOString()
+                });
+                localStorage.setItem('local_royal_bets', JSON.stringify(localBets));
+                
+                showRoyalNotification('💾 Сохранено локально (архивы недоступны)');
             }
         }
         
-        function randomizeBets() {
+        function randomizeRoyalBets() {
             // Сбрасываем все ставки
-            candidates.forEach(c => myBets[c] = 0);
+            courtiers.forEach(courtier => playerBets[courtier] = 0);
             
-            // Распределяем 100 жетонов случайно
-            let left = 100;
-            const shuffled = [...candidates].sort(() => Math.random() - 0.5);
+            // Распределяем 100 жетонов случайным королевским образом
+            let tokensLeft = 100;
+            const shuffled = [...courtiers].sort(() => Math.random() - 0.5);
             
             for (let i = 0; i < shuffled.length; i++) {
-                if (left <= 0) break;
+                if (tokensLeft <= 0) break;
                 
                 if (i === shuffled.length - 1) {
-                    myBets[shuffled[i]] = left;
+                    playerBets[shuffled[i]] = tokensLeft;
                     break;
                 }
                 
-                const max = Math.min(Math.floor(left / 2) + 1, left);
+                const max = Math.min(Math.floor(tokensLeft / 2) + 1, tokensLeft);
                 const random = Math.floor(Math.random() * max);
-                myBets[shuffled[i]] = random;
-                left -= random;
+                playerBets[shuffled[i]] = random;
+                tokensLeft -= random;
             }
             
-            showCandidates();
-            localStorage.setItem('my_bets', JSON.stringify(myBets));
-            showMessage('🎲 Ставки распределены случайно!');
+            displayCourtiers();
+            localStorage.setItem('royal_bets', JSON.stringify(playerBets));
+            showRoyalNotification('🎲 Жетоны распределены по королевской воле!');
         }
         
-        function resetBets() {
-            if (confirm('Сбросить все ваши ставки?')) {
-                candidates.forEach(c => myBets[c] = 0);
-                showCandidates();
-                localStorage.setItem('my_bets', JSON.stringify(myBets));
-                showMessage('🗑️ Все ставки сброшены');
+        function resetRoyalBets() {
+            if (confirm('🗑️ Отозвать все королевские жетоны?')) {
+                courtiers.forEach(courtier => playerBets[courtier] = 0);
+                displayCourtiers();
+                localStorage.setItem('royal_bets', JSON.stringify(playerBets));
+                showRoyalNotification('🔄 Все жетоны возвращены в казну!');
             }
         }
         
-        function showDemoData() {
-            const demoBets = [
-                { user_name: 'Алексей', top_choice: 'Жилко', bets: { 'Жилко': 25 }, created_at: new Date() },
-                { user_name: 'Мария', top_choice: 'Биличенко', bets: { 'Биличенко': 30 }, created_at: new Date() },
-                { user_name: 'Сергей', top_choice: 'Куликов', bets: { 'Куликов': 20 }, created_at: new Date() }
+        function listenForUpdates() {
+            try {
+                // Подписываемся на обновления в реальном времени
+                const subscription = supabase
+                    .channel('royal-updates')
+                    .on('postgres_changes', 
+                        { event: 'INSERT', schema: 'public', table: 'bets' }, 
+                        () => {
+                            console.log('🔄 Получено обновление из королевских архивов');
+                            loadCourtData();
+                        }
+                    )
+                    .subscribe();
+                
+                console.log('✅ Подписка на королевские обновления создана');
+                
+            } catch (error) {
+                console.log('⚠️ Не удалось создать подписку на обновления');
+            }
+        }
+        
+        function showRoyalDemo() {
+            courtStats.totalBets = 42;
+            courtStats.topChoice = "Жилко";
+            courtStats.activePlayers = 15;
+            
+            // Демо-ставки
+            courtStats.allBets = [
+                { user_name: 'Герцог Алексей', top_choice: 'Жилко', bets: { 'Жилко': 25 }, created_at: new Date() },
+                { user_name: 'Графиня Мария', top_choice: 'Биличенко', bets: { 'Биличенко': 30 }, created_at: new Date() },
+                { user_name: 'Барон Сергей', top_choice: 'Куликов', bets: { 'Куликов': 20 }, created_at: new Date() },
+                { user_name: 'Леди Анна', top_choice: 'Туркина', bets: { 'Туркина': 18 }, created_at: new Date() }
             ];
             
-            updateStats(demoBets);
-            showPlayers(demoBets);
+            updateCourtStats();
+            displayCourtiersList();
             
-            document.getElementById('statusText').textContent = '✅ Подключено! (демо-данные)';
+            document.getElementById('statusText').textContent = 'Демо-режим (архивы недоступны)';
         }
         
-        function showMessage(text) {
-            const msg = document.createElement('div');
-            msg.className = 'notification';
-            msg.textContent = text;
+        function createRoyalConfetti() {
+            // Создаем конфетти в стиле барокко
+            const colors = ['#D4AF37', '#B8860B', '#FFD700', '#FFF8E7'];
+            const symbols = ['👑', '⚜️', '🎭', '🏆', '💎', '✨', '🌟', '💫'];
             
-            document.body.appendChild(msg);
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                confetti.style.position = 'fixed';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-50px';
+                confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.fontSize = Math.random() * 25 + 20 + 'px';
+                confetti.style.zIndex = '9999';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.opacity = '0.9';
+                
+                document.body.appendChild(confetti);
+                
+                // Анимация падения
+                const animation = confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 2000 + 1000,
+                    easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+        
+        function showRoyalNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <div class="notification-icon">👑</div>
+                <div>${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
             
             setTimeout(() => {
-                msg.remove();
+                notification.remove();
             }, 3000);
         }
         
-        // ========== ЗАПУСК ==========
+        function openModal() {
+            document.getElementById('allBetsModal').style.display = 'flex';
+            loadAllRoyalBets();
+        }
+        
+        function closeModal() {
+            document.getElementById('allBetsModal').style.display = 'none';
+        }
+        
+        async function loadAllRoyalBets() {
+            try {
+                const { data: bets, error } = await supabase
+                    .from('bets')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                const container = document.getElementById('allBetsList');
+                
+                if (!bets || bets.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: rgba(212, 175, 55, 0.7);">
+                            🏰 Архивы пусты
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '<div style="display: flex; flex-direction: column; gap: 10px;">';
+                
+                bets.forEach(bet => {
+                    const date = new Date(bet.created_at).toLocaleDateString('ru-RU', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    const isYou = bet.user_id === playerId;
+                    
+                    html += `
+                        <div style="padding: 15px; background: ${isYou ? 'rgba(212, 175, 55, 0.1)' : 'rgba(255, 255, 255, 0.05)'}; border-radius: 10px; border-left: 4px solid ${isYou ? '#D4AF37' : 'transparent'}">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong style="color: #D4AF37;">${bet.user_name || 'Анонимный придворный'} ${isYou ? '(Вы)' : ''}</strong>
+                                    <div style="font-size: 0.9em; color: rgba(255, 248, 231, 0.6); margin-top: 5px;">${date}</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: bold; color: #D4AF37;">${bet.top_choice}: ${bet.bets[bet.top_choice]}%</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #FF6B6B;">
+                        ⚠️ Не удалось загрузить архивы
+                    </div>
+                `;
+            }
+        }
+        
+        // ========== ЗАПУСК КОРОЛЕВСКОГО ДВОРА ==========
         document.addEventListener('DOMContentLoaded', () => {
-            init();
+            initializeCourt();
             
-            document.getElementById('saveBtn').addEventListener('click', saveMyBet);
-            document.getElementById('randomBtn').addEventListener('click', randomizeBets);
-            document.getElementById('resetBtn').addEventListener('click', resetBets);
+            document.getElementById('saveBtn').addEventListener('click', saveRoyalBet);
+            document.getElementById('randomBtn').addEventListener('click', randomizeRoyalBets);
+            document.getElementById('resetBtn').addEventListener('click', resetRoyalBets);
             
-            // Автообновление каждые 10 секунд
-            setInterval(() => loadAllBets(), 10000);
+            // Автообновление каждые 30 секунд
+            setInterval(loadCourtData, 30000);
         });
     </script>
 </body>
