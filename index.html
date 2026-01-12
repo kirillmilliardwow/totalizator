@@ -3,261 +3,774 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✨ Магический Рандомайзер</title>
+    <title>Микрон Рандомайзер | Принятие решений в микроэлектронике</title>
+    <meta name="description" content="Инструмент для принятия решений в области микроэлектроники и полупроводников">
+    <meta name="keywords" content="микроэлектроника, микрон, рандомайзер, полупроводники, чипы, решение">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png">
+    
+    <!-- Стили -->
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/fonts.css">
+    
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Exo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Иконки -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;700;900&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Open Graph для соцсетей -->
+    <meta property="og:title" content="Микрон Рандомайзер">
+    <meta property="og:description" content="Профессиональный инструмент для принятия решений в микроэлектронике">
+    <meta property="og:image" content="https://www.mikron.ru/local/templates/mikron/img/logo.png">
+    <meta property="og:type" content="website">
 </head>
-<body>
-    <!-- Фоновые элементы -->
-    <div class="floating-elements">
-        <div class="floating-emoji">✨</div>
-        <div class="floating-emoji">🌸</div>
-        <div class="floating-emoji">🌟</div>
-        <div class="floating-emoji">🎲</div>
-        <div class="floating-emoji">💫</div>
-        <div class="floating-emoji">🌼</div>
-    </div>
-
-    <div class="particles-container" id="particles"></div>
-
-    <!-- Конфетти -->
-    <div class="confetti-container"></div>
-
-    <!-- Контейнер приложения -->
-    <div class="app-container">
-        <!-- Заголовок -->
-        <header class="app-header">
-            <div class="header-ornament left"></div>
-            <h1 class="app-title">
-                <span class="title-text">Магический Рандомайзер</span>
-                <div class="title-decoration">
-                    <div class="sparkle"></div>
-                    <div class="sparkle"></div>
-                    <div class="sparkle"></div>
-                </div>
-            </h1>
-            <div class="header-ornament right"></div>
-        </header>
-
-        <!-- Основной контент -->
-        <main class="main-content">
-            <!-- Вопрос -->
-            <div class="question-section">
-                <div class="input-container">
-                    <i class="fas fa-question-circle input-icon"></i>
-                    <input type="text" id="questionInput" 
-                           placeholder="Задайте свой вопрос... или нажмите на примеры ниже"
-                           maxlength="200">
-                    <button class="clear-btn" id="clearBtn">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="example-questions">
-                    <button class="example-btn" data-question="Мне сегодня повезёт?">
-                        <span>🎯</span> Мне сегодня повезёт?
-                    </button>
-                    <button class="example-btn" data-question="Стоит ли начать новый проект?">
-                        <span>🚀</span> Стоит ли начать новый проект?
-                    </button>
-                    <button class="example-btn" data-question="Встречу ли я любовь?">
-                        <span>💖</span> Встречу ли я любовь?
-                    </button>
+<body class="micron-theme">
+    <!-- Шапка в стиле Микрон -->
+    <header class="micron-header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-contact">
+                    <span class="contact-item">
+                        <i class="fas fa-microchip"></i>
+                        <span>Лидер микроэлектроники</span>
+                    </span>
+                    <span class="contact-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Основан в 1964</span>
+                    </span>
                 </div>
             </div>
-
-            <!-- Рандомайзер -->
-            <div class="randomizer-section">
-                <div class="randomizer-wheel" id="randomizerWheel">
-                    <div class="wheel-inner">
-                        <div class="wheel-segment" style="--i:0; --color:#FF6B8B">
-                            <span>ДА</span>
+        </div>
+        
+        <div class="header-main">
+            <div class="container">
+                <div class="logo-section">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-microchip"></i>
+                            <div class="chip-grid">
+                                <div class="grid-dot"></div>
+                                <div class="grid-dot"></div>
+                                <div class="grid-dot"></div>
+                                <div class="grid-dot"></div>
+                                <div class="grid-dot"></div>
+                                <div class="grid-dot"></div>
+                                <div class="grid-dot"></div>
+                                <div class="grid-dot"></div>
+                                <div class="grid-dot"></div>
+                            </div>
                         </div>
-                        <div class="wheel-segment" style="--i:1; --color:#4ECDC4">
-                            <span>НЕТ</span>
-                        </div>
-                        <div class="wheel-segment" style="--i:2; --color:#45B7D1">
-                            <span>НАВЕРНОЕ</span>
-                        </div>
-                        <div class="wheel-segment" style="--i:3; --color:#96CEB4">
-                            <span>ОБЯЗАТЕЛЬНО</span>
-                        </div>
-                        <div class="wheel-segment" style="--i:4; --color:#FFEAA7">
-                            <span>НИКАК</span>
-                        </div>
-                        <div class="wheel-segment" style="--i:5; --color:#DDA0DD">
-                            <span>СПРОСИ ПОЗЖЕ</span>
-                        </div>
-                        <div class="wheel-segment" style="--i:6; --color:#98D8C8">
-                            <span>ДАЖЕ НЕ ДУМАЙ</span>
-                        </div>
-                        <div class="wheel-segment" style="--i:7; --color:#F7DC6F">
-                            <span>ЗНАКИ ГОВОРЯТ ДА</span>
-                        </div>
-                    </div>
-                    <div class="wheel-center">
-                        <div class="wheel-pointer"></div>
-                    </div>
-                </div>
-
-                <div class="controls">
-                    <button class="spin-btn" id="spinBtn">
-                        <i class="fas fa-magic spin-icon"></i>
-                        <span>Крутить колесо</span>
-                        <div class="btn-sparkles">
-                            <div class="sparkle"></div>
-                            <div class="sparkle"></div>
-                            <div class="sparkle"></div>
-                        </div>
-                    </button>
-                    
-                    <div class="quick-answers">
-                        <button class="quick-btn" data-answer="ДА">
-                            <span class="answer-emoji">👍</span>
-                            <span class="answer-text">Да</span>
-                        </button>
-                        <button class="quick-btn" data-answer="НЕТ">
-                            <span class="answer-emoji">👎</span>
-                            <span class="answer-text">Нет</span>
-                        </button>
-                        <button class="quick-btn" data-answer="НАВЕРНОЕ">
-                            <span class="answer-emoji">🤔</span>
-                            <span class="answer-text">Наверное</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Результат -->
-            <div class="result-section" id="resultSection">
-                <div class="result-card hidden">
-                    <div class="result-header">
-                        <div class="result-emoji">🎯</div>
-                        <h3 class="result-title">Ответ Вселенной:</h3>
-                    </div>
-                    <div class="result-content">
-                        <p class="result-question" id="resultQuestion"></p>
-                        <div class="result-answer">
-                            <span class="answer-value" id="resultAnswer"></span>
-                            <div class="answer-ornament"></div>
-                        </div>
-                        <p class="result-message" id="resultMessage"></p>
-                    </div>
-                    <button class="share-btn" id="shareBtn">
-                        <i class="fas fa-share-alt"></i> Поделиться
-                    </button>
-                </div>
-            </div>
-
-            <!-- Пожелания дня -->
-            <div class="wishes-section">
-                <h2 class="section-title">
-                    <i class="fas fa-sun"></i>
-                    <span>Пожелания прекрасного дня</span>
-                </h2>
-                
-                <div class="wishes-container">
-                    <div class="wish-card">
-                        <div class="wish-emoji">🌅</div>
-                        <div class="wish-content">
-                            <p class="wish-text">Пусть утро подарит тебе улыбку солнца и лёгкость в сердце</p>
-                            <button class="copy-wish" data-wish="Пусть утро подарит тебе улыбку солнца и лёгкость в сердце">
-                                <i class="far fa-copy"></i>
-                            </button>
+                        <div class="logo-text">
+                            <h1>МИКРОН</h1>
+                            <p class="logo-subtitle">Рандомайзер решений</p>
                         </div>
                     </div>
                     
-                    <div class="wish-card">
-                        <div class="wish-emoji">✨</div>
-                        <div class="wish-content">
-                            <p class="wish-text">Желаю, чтобы сегодня сбылось то, о чём ты даже не мечтал</p>
-                            <button class="copy-wish" data-wish="Желаю, чтобы сегодня сбылось то, о чём ты даже не мечтал">
-                                <i class="far fa-copy"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="wish-card">
-                        <div class="wish-emoji">🌺</div>
-                        <div class="wish-content">
-                            <p class="wish-text">Пусть этот день будет как цветок - прекрасен и неповторим</p>
-                            <button class="copy-wish" data-wish="Пусть этот день будет как цветок - прекрасен и неповторим">
-                                <i class="far fa-copy"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="wish-card">
-                        <div class="wish-emoji">🎶</div>
-                        <div class="wish-content">
-                            <p class="wish-text">Пусть душа поёт от счастья, а сердце танцует от радости</p>
-                            <button class="copy-wish" data-wish="Пусть душа поёт от счастья, а сердце танцует от радости">
-                                <i class="far fa-copy"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="random-wish-btn" id="randomWishBtn">
-                    <i class="fas fa-random"></i>
-                    <span>Случайное пожелание</span>
-                </button>
-            </div>
-
-            <!-- История -->
-            <div class="history-section">
-                <h3 class="section-title">
-                    <i class="fas fa-history"></i>
-                    <span>История ответов</span>
-                </h3>
-                <div class="history-list" id="historyList">
-                    <!-- История будет добавляться здесь -->
-                </div>
-                <button class="clear-history" id="clearHistory">
-                    <i class="fas fa-trash-alt"></i> Очистить историю
-                </button>
-            </div>
-        </main>
-
-        <!-- Подвал -->
-        <footer class="app-footer">
-            <div class="footer-content">
-                <div class="theme-switch">
-                    <label class="switch">
-                        <input type="checkbox" id="themeSwitch">
-                        <span class="slider round">
-                            <i class="fas fa-sun day-icon"></i>
-                            <i class="fas fa-moon night-icon"></i>
-                        </span>
-                    </label>
-                    <span class="theme-label">Тема</span>
-                </div>
-                
-                <div class="footer-info">
-                    <p>Сделано с ❤️ и магией</p>
-                    <div class="social-links">
-                        <button class="social-btn" onclick="shareApp()">
-                            <i class="fas fa-share"></i>
+                    <nav class="main-nav">
+                        <button class="nav-btn active" data-section="randomizer">
+                            <i class="fas fa-random"></i>
+                            <span>Рандомайзер</span>
                         </button>
-                        <button class="social-btn" onclick="rateApp()">
-                            <i class="fas fa-star"></i>
+                        <button class="nav-btn" data-section="decisions">
+                            <i class="fas fa-cogs"></i>
+                            <span>Решения</span>
                         </button>
-                        <button class="social-btn" onclick="showAbout()">
+                        <button class="nav-btn" data-section="statistics">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Статистика</span>
+                        </button>
+                        <button class="nav-btn" data-section="about">
                             <i class="fas fa-info-circle"></i>
+                            <span>О проекте</span>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Микрочип фон -->
+    <div class="chip-background">
+        <div class="chip-layer">
+            <div class="circuit-line horizontal"></div>
+            <div class="circuit-line vertical"></div>
+            <div class="circuit-line diagonal"></div>
+            <div class="transistor"></div>
+            <div class="transistor"></div>
+            <div class="transistor"></div>
+            <div class="resistor"></div>
+            <div class="capacitor"></div>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <main class="container main-container">
+        <!-- Рандомайзер -->
+        <section id="randomizer" class="section active">
+            <div class="section-header">
+                <h2>
+                    <i class="fas fa-random"></i>
+                    Рандомайзер технических решений
+                </h2>
+                <p class="section-subtitle">Инструмент для принятия решений в микроэлектронике</p>
+            </div>
+            
+            <div class="decision-process">
+                <div class="process-step active">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Сформулируйте вопрос</h3>
+                        <div class="question-input">
+                            <textarea id="techQuestion" 
+                                      placeholder="Пример: Стоит ли переходить на новую технологию производства чипов 90нм?" 
+                                      rows="3"></textarea>
+                            <div class="input-actions">
+                                <button class="micron-btn secondary" id="clearQuestion">
+                                    <i class="fas fa-times"></i> Очистить
+                                </button>
+                                <button class="micron-btn" id="generateQuestion">
+                                    <i class="fas fa-bolt"></i> Сгенерировать
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="example-questions">
+                            <h4>Примеры технических вопросов:</h4>
+                            <div class="examples-grid">
+                                <button class="example-chip" data-question="Выбрать SiC или GaN для нового проекта?">
+                                    <span class="chip-icon"><i class="fas fa-atom"></i></span>
+                                    <span class="chip-text">Выбрать SiC или GaN для нового проекта?</span>
+                                </button>
+                                <button class="example-chip" data-question="Инвестировать в новое паковочное оборудование?">
+                                    <span class="chip-icon"><i class="fas fa-robot"></i></span>
+                                    <span class="chip-text">Инвестировать в новое паковочное оборудование?</span>
+                                </button>
+                                <button class="example-chip" data-question="Разрабатывать собственный процессор или использовать готовые решения?">
+                                    <span class="chip-icon"><i class="fas fa-brain"></i></span>
+                                    <span class="chip-text">Собственный процессор или готовые решения?</span>
+                                </button>
+                                <button class="example-chip" data-question="Переходить на новый технологический узел 65нм?">
+                                    <span class="chip-icon"><i class="fas fa-ruler-vertical"></i></span>
+                                    <span class="chip-text">Переходить на технологический узел 65нм?</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Выберите метод анализа</h3>
+                        <div class="analysis-methods">
+                            <div class="method-selector">
+                                <div class="method-option active" data-method="semiconductor">
+                                    <div class="method-icon">
+                                        <i class="fas fa-microchip"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <h4>Полупроводниковый анализ</h4>
+                                        <p>Статистический метод на основе данных производства</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="method-option" data-method="quantum">
+                                    <div class="method-icon">
+                                        <i class="fas fa-atom"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <h4>Квантовый рандомизатор</h4>
+                                        <p>Использует принципы квантовой механики</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="method-option" data-method="neural">
+                                    <div class="method-icon">
+                                        <i class="fas fa-network-wired"></i>
+                                    </div>
+                                    <div class="method-info">
+                                        <h4>Нейросетевой алгоритм</h4>
+                                        <p>Искусственный интеллект для принятия решений</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Запустите анализ</h3>
+                        <div class="analysis-execution">
+                            <div class="analysis-visualization">
+                                <div class="wafer-diagram">
+                                    <div class="wafer">
+                                        <!-- Транзисторы на пластине -->
+                                        <div class="transistor-element" style="--x: 20%; --y: 30%;"></div>
+                                        <div class="transistor-element" style="--x: 40%; --y: 50%;"></div>
+                                        <div class="transistor-element" style="--x: 60%; --y: 30%;"></div>
+                                        <div class="transistor-element" style="--x: 80%; --y: 50%;"></div>
+                                        <div class="transistor-element" style="--x: 50%; --y: 70%;"></div>
+                                        
+                                        <!-- Линии на пластине -->
+                                        <div class="wafer-line horizontal"></div>
+                                        <div class="wafer-line vertical"></div>
+                                        <div class="wafer-grid">
+                                            <div class="grid-cell"></div>
+                                            <div class="grid-cell"></div>
+                                            <div class="grid-cell"></div>
+                                            <div class="grid-cell"></div>
+                                            <div class="grid-cell"></div>
+                                        </div>
+                                    </div>
+                                    <div class="wafer-label">Кремниевая пластина</div>
+                                </div>
+                                
+                                <div class="analysis-controls">
+                                    <button class="micron-btn large execute-btn" id="executeAnalysis">
+                                        <i class="fas fa-play-circle"></i>
+                                        <span>Запустить анализ</span>
+                                        <div class="btn-pulse"></div>
+                                    </button>
+                                    
+                                    <div class="quick-decisions">
+                                        <h4>Быстрые решения:</h4>
+                                        <div class="quick-buttons">
+                                            <button class="quick-decision-btn" data-decision="ДА">
+                                                <span class="decision-icon"><i class="fas fa-check-circle"></i></span>
+                                                <span class="decision-text">Утвердить</span>
+                                            </button>
+                                            <button class="quick-decision-btn" data-decision="НЕТ">
+                                                <span class="decision-icon"><i class="fas fa-times-circle"></i></span>
+                                                <span class="decision-text">Отклонить</span>
+                                            </button>
+                                            <button class="quick-decision-btn" data-decision="ИССЛЕДОВАТЬ">
+                                                <span class="decision-icon"><i class="fas fa-search"></i></span>
+                                                <span class="decision-text">Исследовать</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Результат -->
+            <div class="analysis-result" id="analysisResult">
+                <div class="result-container hidden">
+                    <div class="result-header">
+                        <div class="result-badge">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>РЕЗУЛЬТАТ АНАЛИЗА</span>
+                        </div>
+                        <div class="result-meta">
+                            <span class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                <span id="resultDate"></span>
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span id="resultTime"></span>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="result-content">
+                        <div class="result-question">
+                            <h4>Вопрос:</h4>
+                            <p id="resultQuestionText"></p>
+                        </div>
+                        
+                        <div class="result-decision">
+                            <div class="decision-main">
+                                <div class="decision-icon-large">
+                                    <i class="fas fa-check-circle success"></i>
+                                </div>
+                                <div class="decision-text">
+                                    <h3 id="decisionText">РЕКОМЕНДУЕТСЯ</h3>
+                                    <p class="decision-confidence">
+                                        Уверенность: <span id="confidenceLevel">95%</span>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="decision-reasoning">
+                                <h4>Обоснование:</h4>
+                                <p id="decisionReasoning"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="result-metrics">
+                            <div class="metric">
+                                <div class="metric-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="metric-info">
+                                    <span class="metric-label">Эффективность</span>
+                                    <div class="metric-bar">
+                                        <div class="metric-fill" style="width: 85%"></div>
+                                    </div>
+                                    <span class="metric-value">85%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="metric">
+                                <div class="metric-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="metric-info">
+                                    <span class="metric-label">Рентабельность</span>
+                                    <div class="metric-bar">
+                                        <div class="metric-fill" style="width: 72%"></div>
+                                    </div>
+                                    <span class="metric-value">72%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="metric">
+                                <div class="metric-icon">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div class="metric-info">
+                                    <span class="metric-label">Технологичность</span>
+                                    <div class="metric-bar">
+                                        <div class="metric-fill" style="width: 91%"></div>
+                                    </div>
+                                    <span class="metric-value">91%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-actions">
+                        <button class="micron-btn secondary" id="saveResult">
+                            <i class="fas fa-save"></i> Сохранить решение
+                        </button>
+                        <button class="micron-btn" id="exportResult">
+                            <i class="fas fa-file-export"></i> Экспорт в PDF
+                        </button>
+                        <button class="micron-btn" id="shareResult">
+                            <i class="fas fa-share-alt"></i> Поделиться
                         </button>
                     </div>
                 </div>
             </div>
-        </footer>
-    </div>
+        </section>
 
-    <!-- Модальное окно -->
-    <div class="modal-overlay hidden" id="modalOverlay">
-        <div class="modal">
+        <!-- База решений -->
+        <section id="decisions" class="section">
+            <div class="section-header">
+                <h2>
+                    <i class="fas fa-database"></i>
+                    База технических решений
+                </h2>
+                <p class="section-subtitle">Архив принятых решений и их результатов</p>
+            </div>
+            
+            <div class="decisions-database">
+                <div class="database-filters">
+                    <div class="filter-group">
+                        <label for="filterCategory"><i class="fas fa-filter"></i> Категория:</label>
+                        <select id="filterCategory" class="micron-select">
+                            <option value="all">Все категории</option>
+                            <option value="technology">Технологии</option>
+                            <option value="equipment">Оборудование</option>
+                            <option value="materials">Материалы</option>
+                            <option value="investment">Инвестиции</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterResult"><i class="fas fa-chart-pie"></i> Результат:</label>
+                        <select id="filterResult" class="micron-select">
+                            <option value="all">Все результаты</option>
+                            <option value="approved">Утверждено</option>
+                            <option value="rejected">Отклонено</option>
+                            <option value="research">На исследовании</option>
+                        </select>
+                    </div>
+                    
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchDecisions" placeholder="Поиск решений...">
+                    </div>
+                </div>
+                
+                <div class="decisions-grid" id="decisionsGrid">
+                    <!-- Решения загружаются динамически -->
+                </div>
+                
+                <div class="database-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalDecisions">0</h3>
+                            <p>Всего решений</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="approvedDecisions">0</h3>
+                            <p>Утверждено</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pendingDecisions">0</h3>
+                            <p>На рассмотрении</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Статистика -->
+        <section id="statistics" class="section">
+            <div class="section-header">
+                <h2>
+                    <i class="fas fa-chart-bar"></i>
+                    Аналитика решений
+                </h2>
+                <p class="section-subtitle">Статистика и тенденции в принятии решений</p>
+            </div>
+            
+            <div class="analytics-dashboard">
+                <div class="dashboard-row">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h4><i class="fas fa-pie-chart"></i> Распределение решений</h4>
+                            <select class="chart-period">
+                                <option>За месяц</option>
+                                <option>За квартал</option>
+                                <option>За год</option>
+                            </select>
+                        </div>
+                        <div class="chart-placeholder" id="decisionsChart">
+                            <!-- График будет здесь -->
+                            <div class="chart-mock">
+                                <div class="pie-chart">
+                                    <div class="pie-slice approved"></div>
+                                    <div class="pie-slice rejected"></div>
+                                    <div class="pie-slice pending"></div>
+                                </div>
+                                <div class="chart-legend">
+                                    <div class="legend-item">
+                                        <span class="legend-color approved"></span>
+                                        <span>Утверждено (65%)</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-color rejected"></span>
+                                        <span>Отклонено (20%)</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-color pending"></span>
+                                        <span>На рассмотрении (15%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h4><i class="fas fa-chart-line"></i> Тенденции по месяцам</h4>
+                        </div>
+                        <div class="chart-placeholder" id="trendsChart">
+                            <!-- График трендов -->
+                            <div class="trend-chart">
+                                <div class="trend-line">
+                                    <div class="data-point" style="left: 10%; height: 40%"></div>
+                                    <div class="data-point" style="left: 25%; height: 60%"></div>
+                                    <div class="data-point" style="left: 40%; height: 30%"></div>
+                                    <div class="data-point" style="left: 55%; height: 80%"></div>
+                                    <div class="data-point" style="left: 70%; height: 50%"></div>
+                                    <div class="data-point" style="left: 85%; height: 70%"></div>
+                                </div>
+                                <div class="trend-grid">
+                                    <div class="grid-line"></div>
+                                    <div class="grid-line"></div>
+                                    <div class="grid-line"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-row">
+                    <div class="insights-container">
+                        <div class="insights-header">
+                            <h4><i class="fas fa-lightbulb"></i> Ключевые инсайты</h4>
+                        </div>
+                        <div class="insights-list">
+                            <div class="insight-item">
+                                <div class="insight-icon">
+                                    <i class="fas fa-arrow-up success"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h5>Рост эффективности</h5>
+                                    <p>Утвержденные решения показывают рост эффективности на 15% в последнем квартале</p>
+                                </div>
+                            </div>
+                            
+                            <div class="insight-item">
+                                <div class="insight-icon">
+                                    <i class="fas fa-clock warning"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h5>Увеличение времени анализа</h5>
+                                    <p>Среднее время принятия решений увеличилось на 2 дня</p>
+                                </div>
+                            </div>
+                            
+                            <div class="insight-item">
+                                <div class="insight-icon">
+                                    <i class="fas fa-chart-pie info"></i>
+                                </div>
+                                <div class="insight-content">
+                                    <h5>Изменение структуры решений</h5>
+                                    <p>Доля технологических решений выросла до 45% от общего числа</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendations-container">
+                        <div class="recommendations-header">
+                            <h4><i class="fas fa-star"></i> Рекомендации</h4>
+                        </div>
+                        <div class="recommendations-list">
+                            <div class="recommendation-item">
+                                <div class="recommendation-priority high"></div>
+                                <div class="recommendation-content">
+                                    <h5>Оптимизация процесса</h5>
+                                    <p>Рекомендуется внедрить автоматизированную систему анализа рисков</p>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendation-item">
+                                <div class="recommendation-priority medium"></div>
+                                <div class="recommendation-content">
+                                    <h5>Обучение персонала</h5>
+                                    <p>Провести обучение по использованию новых методов анализа</p>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendation-item">
+                                <div class="recommendation-priority low"></div>
+                                <div class="recommendation-content">
+                                    <h5>Расширение базы данных</h5>
+                                    <p>Добавить исторические данные за предыдущие периоды</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- О проекте -->
+        <section id="about" class="section">
+            <div class="section-header">
+                <h2>
+                    <i class="fas fa-info-circle"></i>
+                    О проекте
+                </h2>
+                <p class="section-subtitle">Технологический рандомайзер для микроэлектроники</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-card">
+                    <div class="about-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="about-text">
+                        <h3>Технологическая экспертиза</h3>
+                        <p>Разработано с учетом специфики микроэлектронного производства и опыта ПАО "Микрон"</p>
+                    </div>
+                </div>
+                
+                <div class="about-card">
+                    <div class="about-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="about-text">
+                        <h3>Интеллектуальный анализ</h3>
+                        <p>Использует алгоритмы на основе статистики производства и данных о технологиях</p>
+                    </div>
+                </div>
+                
+                <div class="about-card">
+                    <div class="about-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="about-text">
+                        <h3>Безопасность данных</h3>
+                        <p>Все решения хранятся локально, обеспечивается конфиденциальность информации</p>
+                    </div>
+                </div>
+                
+                <div class="about-technologies">
+                    <h3>Используемые технологии:</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <i class="fab fa-js-square"></i>
+                            <span>JavaScript ES6+</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fab fa-html5"></i>
+                            <span>HTML5 Canvas</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fab fa-css3-alt"></i>
+                            <span>CSS3 Grid/Flex</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-database"></i>
+                            <span>LocalStorage API</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="company-info">
+                    <h3>ПАО "Микрон"</h3>
+                    <p>Ведущее предприятие России в области микроэлектроники. Основано в 1964 году.</p>
+                    <div class="company-stats">
+                        <div class="company-stat">
+                            <i class="fas fa-industry"></i>
+                            <span>Более 50 лет на рынке</span>
+                        </div>
+                        <div class="company-stat">
+                            <i class="fas fa-users"></i>
+                            <span>3000+ сотрудников</span>
+                        </div>
+                        <div class="company-stat">
+                            <i class="fas fa-microchip"></i>
+                            <span>90нм технологический узел</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="micron-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-microchip"></i>
+                        Микрон Рандомайзер
+                    </h4>
+                    <p>Инструмент для принятия технических решений в микроэлектронике</p>
+                    <div class="footer-links">
+                        <a href="https://www.mikron.ru" target="_blank" class="footer-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            Официальный сайт
+                        </a>
+                        <a href="#" class="footer-link" id="documentationBtn">
+                            <i class="fas fa-book"></i>
+                            Документация
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>124460, Москва, Зеленоград</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+7 (499) 735-85-85</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@mikron.ru</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Настройки</h4>
+                    <div class="settings">
+                        <div class="setting-item">
+                            <label class="switch">
+                                <input type="checkbox" id="themeToggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span>Тёмная тема</span>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="switch">
+                                <input type="checkbox" id="soundToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                            <span>Звуки</span>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="switch">
+                                <input type="checkbox" id="animationsToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                            <span>Анимации</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>&copy; 2024 ПАО "Микрон". Все права защищены.</p>
+                    <p>Это демонстрационное приложение, не является официальным продуктом компании.</p>
+                </div>
+                
+                <div class="footer-badges">
+                    <div class="badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-bolt"></i>
+                        <span>Fast</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Responsive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальные окна -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="resultModal">
             <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle"></h3>
+                <h3 id="modalTitle"></h3>
                 <button class="modal-close" id="modalClose">
                     <i class="fas fa-times"></i>
                 </button>
@@ -267,13 +780,14 @@
     </div>
 
     <!-- Аудио элементы -->
-    <audio id="spinSound" src="assets/sounds/spin.mp3" preload="auto"></audio>
-    <audio id="resultSound" src="assets/sounds/result.mp3" preload="auto"></audio>
+    <audio id="analysisSound" src="assets/sounds/analysis.mp3" preload="auto"></audio>
+    <audio id="decisionSound" src="assets/sounds/decision.mp3" preload="auto"></audio>
     <audio id="clickSound" src="assets/sounds/click.mp3" preload="auto"></audio>
 
+    <!-- Скрипты -->
     <script src="script.js"></script>
-    <script src="particles.js"></script>
-    <script src="sounds.js"></script>
+    <script src="components.js"></script>
     <script src="telegram.js"></script>
+    <script src="assets/js/charts.js"></script>
 </body>
 </html>
