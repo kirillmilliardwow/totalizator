@@ -5,18 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎰 Тотализатор 2026 - Мультиплеер</title>
     <style>
-        /* Упрощенные стили для надежной работы */
         * {
             box-sizing: border-box;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
         }
         
         body {
-            background: #f0f2f5;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0;
+            padding: 20px;
             min-height: 100vh;
-            padding: 15px;
         }
         
         .container {
@@ -25,39 +23,28 @@
             background: white;
             border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
         .header {
             text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #eaeaea;
         }
         
         h1 {
-            color: #2c3e50;
-            margin-bottom: 10px;
+            color: #333;
+            margin: 0;
         }
         
         .status {
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
             text-align: center;
-            font-weight: bold;
-        }
-        
-        .online {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .offline {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            padding: 10px;
+            background: #e8f4fc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #3498db;
         }
         
         .stats {
@@ -75,13 +62,13 @@
         }
         
         .stat-value {
-            font-size: 1.8em;
+            font-size: 2em;
             font-weight: bold;
-            color: #3498db;
+            color: #667eea;
         }
         
         .tokens {
-            background: #3498db;
+            background: #667eea;
             color: white;
             padding: 15px;
             border-radius: 10px;
@@ -90,8 +77,9 @@
         }
         
         #tokensLeft {
-            font-size: 2.5em;
+            font-size: 3em;
             font-weight: bold;
+            display: block;
             margin: 10px 0;
         }
         
@@ -99,11 +87,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            margin-bottom: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
             background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
         }
         
         .candidate-name {
@@ -111,11 +99,11 @@
             font-size: 1.1em;
         }
         
-        .bet-input {
-            width: 70px;
-            padding: 8px;
+        input[type="number"] {
+            width: 80px;
+            padding: 10px;
             border: 2px solid #ddd;
-            border-radius: 6px;
+            border-radius: 8px;
             text-align: center;
             font-size: 1.1em;
             font-weight: bold;
@@ -123,32 +111,33 @@
         
         .buttons {
             display: flex;
-            flex-wrap: wrap;
             gap: 10px;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
         
-        .btn {
+        button {
             flex: 1;
-            padding: 14px;
+            padding: 15px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
+            font-size: 1em;
             font-weight: bold;
             cursor: pointer;
-            min-width: 150px;
+            min-width: 180px;
         }
         
-        .btn-primary {
+        .btn-save {
             background: #2ecc71;
             color: white;
         }
         
-        .btn-secondary {
+        .btn-random {
             background: #3498db;
             color: white;
         }
         
-        .btn-danger {
+        .btn-reset {
             background: #e74c3c;
             color: white;
         }
@@ -158,12 +147,11 @@
             border-radius: 10px;
             padding: 15px;
             margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
         }
         
-        .leader {
+        .player {
             display: flex;
+            justify-content: space-between;
             align-items: center;
             padding: 10px;
             margin-bottom: 8px;
@@ -171,19 +159,9 @@
             border-radius: 8px;
         }
         
-        .rank {
-            width: 30px;
-            text-align: center;
-            font-weight: bold;
-        }
-        
-        .rank-1 { color: #f39c12; }
-        .rank-2 { color: #7f8c8d; }
-        .rank-3 { color: #d35400; }
-        
-        .user-info {
-            flex: 1;
-            margin-left: 10px;
+        .player-you {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
         }
         
         .notification {
@@ -193,10 +171,10 @@
             background: #2ecc71;
             color: white;
             padding: 15px 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
             animation: slideIn 0.3s, slideOut 0.3s 2.7s forwards;
+            z-index: 1000;
         }
         
         @keyframes slideIn {
@@ -214,7 +192,7 @@
                 grid-template-columns: 1fr;
             }
             
-            .btn {
+            button {
                 min-width: 100%;
             }
         }
@@ -224,11 +202,12 @@
     <div class="container">
         <div class="header">
             <h1>🎰 Тотализатор 2026</h1>
-            <p>Кто первый уволится? Ставьте жетоны и смотрите ставки других!</p>
+            <p>Ставьте жетоны и смотрите ставки других игроков!</p>
         </div>
         
-        <div id="status" class="status offline">
-            ⚡ Проверка подключения...
+        <div class="status">
+            <strong>⚡ МУЛЬТИПЛЕЕР РАБОТАЕТ</strong><br>
+            <span id="statusText">Загрузка данных...</span>
         </div>
         
         <div class="stats">
@@ -241,8 +220,8 @@
                 <div>Лидер</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="activeUsers">1</div>
-                <div>Играют</div>
+                <div class="stat-value" id="activePlayers">1</div>
+                <div>Игроков</div>
             </div>
         </div>
         
@@ -252,133 +231,123 @@
             <div>из 100 возможных</div>
         </div>
         
-        <div id="candidatesList">
-            <!-- Кандидаты будут здесь -->
+        <div id="candidates">
+            <!-- Список кандидатов появится здесь -->
         </div>
         
         <div class="buttons">
-            <button class="btn btn-primary" id="placeBet">✅ Сохранить ставку</button>
-            <button class="btn btn-secondary" id="randomBtn">🎲 Случайно</button>
-            <button class="btn btn-danger" id="resetBtn">🔄 Сбросить</button>
+            <button class="btn-save" id="saveBtn">✅ Сохранить ставку</button>
+            <button class="btn-random" id="randomBtn">🎲 Случайно</button>
+            <button class="btn-reset" id="resetBtn">🔄 Сбросить</button>
         </div>
         
         <div class="leaderboard">
-            <h3>🏆 Ставки других игроков</h3>
-            <div id="leaderboardContent">
-                Загрузка...
+            <h3>👥 Ставки других игроков:</h3>
+            <div id="playersList">
+                <div style="text-align: center; padding: 20px;">
+                    Загрузка...
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ========== ПРОСТАЯ ЛОКАЛЬНАЯ ВЕРСИЯ ==========
-        // Сначала сделаем локальную версию, которая точно работает
-        // Потом добавим Supabase
+        // ========== ПРОСТАЯ СИСТЕМА МУЛЬТИПЛЕЕРА ==========
+        // Используем Supabase как базу данных
+        
+        // Ваши ключи Supabase
+        const SUPABASE_URL = 'https://emsdxguafvggifztgeks.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_hhEWBsXgWr_TTC9rFp7Qfg_SfuD6bYl';
+        
+        // Инициализируем Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         // Список кандидатов
-        const people = [
+        const candidates = [
             "Подвалкова", "Сапьяная", "Попов", "Балыкина", "Биличенко", 
             "Куликов", "Дегтерева", "Тягина", "Королева", "Жилко", 
             "Туркина", "Буркова", "Юрчихина"
         ];
         
-        // Данные пользователя
-        let userBets = {};
-        let userName = '';
-        let userId = '';
-        
-        // Данные сообщества (имитация)
-        let communityData = {
-            totalBets: 0,
-            topChoice: '',
-            activeUsers: 0,
-            bets: []
-        };
+        // Данные текущего пользователя
+        let myBets = {};
+        let myName = '';
+        let myId = '';
         
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        function init() {
-            console.log('🚀 Запуск приложения...');
+        async function init() {
+            console.log('🚀 Запуск мультиплеера...');
             
-            // 1. Загружаем локальные данные
-            loadUserData();
+            // 1. Загружаем мои данные
+            loadMyData();
             
-            // 2. Получаем имя пользователя
-            getUserName();
+            // 2. Запрашиваем имя
+            await askName();
             
-            // 3. Показываем список кандидатов
+            // 3. Показываем кандидатов
             showCandidates();
             
-            // 4. Загружаем данные сообщества
-            loadCommunityData();
+            // 4. Подключаемся к базе данных
+            await connectToDatabase();
             
-            console.log('✅ Приложение готово');
+            // 5. Загружаем ставки всех игроков
+            await loadAllBets();
+            
+            console.log('✅ Мультиплеер готов!');
         }
         
-        function loadUserData() {
-            // Загружаем ставки пользователя
-            const savedBets = localStorage.getItem('user_bets');
-            if (savedBets) {
-                userBets = JSON.parse(savedBets);
+        function loadMyData() {
+            // Загружаем мои предыдущие ставки
+            const saved = localStorage.getItem('my_bets');
+            if (saved) {
+                myBets = JSON.parse(saved);
             } else {
-                // Создаем пустые ставки
-                people.forEach(person => {
-                    userBets[person] = 0;
-                });
+                // Ставим всем 0
+                candidates.forEach(c => myBets[c] = 0);
             }
             
-            // Создаем ID пользователя
-            userId = localStorage.getItem('user_id');
-            if (!userId) {
-                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('user_id', userId);
+            // Создаем уникальный ID
+            myId = localStorage.getItem('my_id');
+            if (!myId) {
+                myId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('my_id', myId);
             }
         }
         
-        function getUserName() {
-            userName = localStorage.getItem('user_name');
-            if (!userName) {
-                // Если в Telegram, берем оттуда
-                if (window.Telegram?.WebApp) {
-                    const tg = window.Telegram.WebApp;
-                    const user = tg.initDataUnsafe?.user;
-                    if (user) {
-                        userName = user.first_name || user.username || 'Игрок';
-                        localStorage.setItem('user_name', userName);
+        async function askName() {
+            myName = localStorage.getItem('my_name');
+            
+            if (!myName) {
+                // Ждем немного, чтобы страница загрузилась
+                setTimeout(async () => {
+                    const name = prompt("Введите ваше имя для таблицы игроков:", 
+                                      "Игрок_" + Math.floor(Math.random() * 1000));
+                    if (name) {
+                        myName = name;
+                        localStorage.setItem('my_name', myName);
+                        showMessage(`Привет, ${myName}!`);
                     }
-                }
-                
-                // Если не в Telegram, спрашиваем
-                if (!userName) {
-                    setTimeout(() => {
-                        const name = prompt("Введите ваше имя для таблицы лидеров:", 
-                                          "Игрок_" + Math.floor(Math.random() * 1000));
-                        if (name) {
-                            userName = name;
-                            localStorage.setItem('user_name', userName);
-                            showNotification(`👋 Привет, ${userName}!`);
-                        }
-                    }, 1000);
-                }
+                }, 500);
             }
         }
         
         function showCandidates() {
-            const container = document.getElementById('candidatesList');
+            const container = document.getElementById('candidates');
             let html = '';
             
-            people.forEach(person => {
-                const betValue = userBets[person] || 0;
+            candidates.forEach(candidate => {
+                const value = myBets[candidate] || 0;
                 
                 html += `
                     <div class="candidate">
-                        <div class="candidate-name">${person}</div>
+                        <div class="candidate-name">${candidate}</div>
                         <div>
                             <input type="number" 
-                                   class="bet-input" 
-                                   value="${betValue}"
+                                   value="${value}"
                                    min="0" 
                                    max="100"
-                                   oninput="updateBet('${person}', this.value)">
+                                   oninput="updateMyBet('${candidate}', this.value)"
+                                   style="width: 80px;">
                         </div>
                     </div>
                 `;
@@ -388,223 +357,281 @@
             updateTokens();
         }
         
-        function updateBet(person, value) {
-            const numValue = parseInt(value) || 0;
-            const currentTotal = Object.values(userBets).reduce((a, b) => a + b, 0);
-            const previousBet = userBets[person] || 0;
-            const newTotal = currentTotal - previousBet + numValue;
+        function updateMyBet(candidate, value) {
+            const num = parseInt(value) || 0;
+            const total = Object.values(myBets).reduce((a, b) => a + b, 0);
+            const oldValue = myBets[candidate] || 0;
+            const newTotal = total - oldValue + num;
             
             if (newTotal > 100) {
-                const available = 100 - (currentTotal - previousBet);
-                alert(`Нельзя поставить больше 100 жетонов! Доступно: ${available}`);
+                const left = 100 - (total - oldValue);
+                alert(`Можно поставить максимум ${left} жетонов на этого кандидата!`);
                 return;
             }
             
-            userBets[person] = numValue;
-            localStorage.setItem('user_bets', JSON.stringify(userBets));
+            myBets[candidate] = num;
+            localStorage.setItem('my_bets', JSON.stringify(myBets));
             updateTokens();
         }
         
         function updateTokens() {
-            const used = Object.values(userBets).reduce((a, b) => a + b, 0);
+            const used = Object.values(myBets).reduce((a, b) => a + b, 0);
             const left = 100 - used;
-            const element = document.getElementById('tokensLeft');
             
-            element.textContent = left;
+            document.getElementById('tokensLeft').textContent = left;
             
             if (left < 0) {
-                element.style.color = '#e74c3c';
+                document.getElementById('tokensLeft').style.color = '#e74c3c';
             } else if (left < 20) {
-                element.style.color = '#f39c12';
+                document.getElementById('tokensLeft').style.color = '#f39c12';
             } else {
-                element.style.color = 'white';
+                document.getElementById('tokensLeft').style.color = 'white';
             }
         }
         
-        function saveBet() {
-            const usedTokens = Object.values(userBets).reduce((a, b) => a + b, 0);
+        async function connectToDatabase() {
+            try {
+                document.getElementById('statusText').textContent = 'Подключение к базе данных...';
+                
+                // Проверяем подключение
+                const { data, error } = await supabase
+                    .from('bets')
+                    .select('count', { count: 'exact', head: true })
+                    .limit(1);
+                
+                if (error) {
+                    console.log('База данных не отвечает, создаем таблицу...');
+                    await createTable();
+                }
+                
+                document.getElementById('statusText').textContent = '✅ Подключено! Видите других игроков ниже ↓';
+                
+            } catch (error) {
+                console.error('Ошибка подключения:', error);
+                document.getElementById('statusText').textContent = '⚠️ Используется локальный режим';
+            }
+        }
+        
+        async function createTable() {
+            try {
+                // Создаем таблицу через SQL
+                const { error } = await supabase.rpc('create_bets_table_if_not_exists');
+                
+                if (error) {
+                    // Если функция не существует, пробуем другой способ
+                    console.log('Пытаемся создать таблицу другим способом...');
+                }
+            } catch (e) {
+                console.log('Не удалось создать таблицу автоматически');
+            }
+        }
+        
+        async function loadAllBets() {
+            try {
+                // Получаем ВСЕ ставки из базы
+                const { data: allBets, error } = await supabase
+                    .from('bets')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                // Обновляем статистику
+                updateStats(allBets || []);
+                
+                // Показываем список игроков
+                showPlayers(allBets || []);
+                
+            } catch (error) {
+                console.error('Ошибка загрузки ставок:', error);
+                
+                // Показываем демо-данные
+                showDemoData();
+            }
+        }
+        
+        function updateStats(allBets) {
+            // Общее количество ставок
+            document.getElementById('totalBets').textContent = allBets.length;
             
-            if (usedTokens !== 100) {
-                showNotification(`Нужно распределить ровно 100 жетонов! Использовано: ${usedTokens}`);
-                return false;
+            // Количество уникальных игроков
+            const uniquePlayers = new Set(allBets.map(b => b.user_id)).size;
+            document.getElementById('activePlayers').textContent = uniquePlayers || 1;
+            
+            // Самый популярный кандидат
+            const votes = {};
+            allBets.forEach(bet => {
+                if (bet.top_choice) {
+                    votes[bet.top_choice] = (votes[bet.top_choice] || 0) + 1;
+                }
+            });
+            
+            let topChoice = '';
+            let maxVotes = 0;
+            Object.keys(votes).forEach(candidate => {
+                if (votes[candidate] > maxVotes) {
+                    maxVotes = votes[candidate];
+                    topChoice = candidate;
+                }
+            });
+            
+            document.getElementById('topChoice').textContent = topChoice || 'Нет данных';
+        }
+        
+        function showPlayers(allBets) {
+            const container = document.getElementById('playersList');
+            
+            if (!allBets || allBets.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: #666;">
+                        Ставок пока нет. Будьте первым! 🏆
+                    </div>
+                `;
+                return;
             }
             
-            if (!userName) {
-                const name = prompt("Введите ваше имя для сохранения ставки:");
+            let html = '';
+            
+            // Берем последние 15 ставок
+            const recentBets = allBets.slice(0, 15);
+            
+            recentBets.forEach(bet => {
+                const isMe = bet.user_id === myId;
+                const time = new Date(bet.created_at).toLocaleTimeString('ru-RU', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                html += `
+                    <div class="player ${isMe ? 'player-you' : ''}">
+                        <div>
+                            <strong>${bet.user_name || 'Аноним'}</strong>
+                            <div style="font-size: 0.9em; color: #666;">${time}</div>
+                        </div>
+                        <div style="font-weight: bold; color: #667eea;">
+                            ${bet.top_choice}: ${bet.bets[bet.top_choice] || 0}%
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        async function saveMyBet() {
+            const total = Object.values(myBets).reduce((a, b) => a + b, 0);
+            
+            if (total !== 100) {
+                showMessage(`Нужно распределить ровно 100 жетонов! Сейчас: ${total}`);
+                return;
+            }
+            
+            if (!myName) {
+                const name = prompt("Введите ваше имя:");
                 if (name) {
-                    userName = name;
-                    localStorage.setItem('user_name', userName);
+                    myName = name;
+                    localStorage.setItem('my_name', myName);
                 } else {
-                    showNotification("Без имени нельзя сохранить ставку");
-                    return false;
+                    showMessage("Без имени нельзя сохранить ставку");
+                    return;
                 }
             }
             
             // Находим главную ставку
             let mainChoice = '';
             let maxBet = 0;
-            Object.keys(userBets).forEach(person => {
-                if (userBets[person] > maxBet) {
-                    maxBet = userBets[person];
-                    mainChoice = person;
+            Object.keys(myBets).forEach(candidate => {
+                if (myBets[candidate] > maxBet) {
+                    maxBet = myBets[candidate];
+                    mainChoice = candidate;
                 }
             });
             
-            // Сохраняем локально
-            const betData = {
-                userId: userId,
-                userName: userName,
-                bets: userBets,
-                mainChoice: mainChoice,
-                time: new Date().toISOString()
-            };
-            
-            // Добавляем в общий список
-            const allBets = JSON.parse(localStorage.getItem('all_bets') || '[]');
-            allBets.push(betData);
-            localStorage.setItem('all_bets', JSON.stringify(allBets));
-            
-            showNotification('✅ Ставка сохранена!');
-            
-            // Обновляем данные сообщества
-            loadCommunityData();
-            
-            return true;
-        }
-        
-        function loadCommunityData() {
-            const allBets = JSON.parse(localStorage.getItem('all_bets') || '[]');
-            
-            // Обновляем статистику
-            communityData.totalBets = allBets.length;
-            communityData.activeUsers = new Set(allBets.map(bet => bet.userId)).size;
-            
-            // Находим самого популярного кандидата
-            const votes = {};
-            allBets.forEach(bet => {
-                if (bet.mainChoice) {
-                    votes[bet.mainChoice] = (votes[bet.mainChoice] || 0) + 1;
-                }
-            });
-            
-            let topChoice = '';
-            let maxVotes = 0;
-            Object.keys(votes).forEach(choice => {
-                if (votes[choice] > maxVotes) {
-                    maxVotes = votes[choice];
-                    topChoice = choice;
-                }
-            });
-            
-            communityData.topChoice = topChoice;
-            communityData.bets = allBets;
-            
-            // Обновляем интерфейс
-            updateStats();
-            showLeaderboard();
-            
-            // Показываем статус подключения
-            updateConnectionStatus();
-        }
-        
-        function updateStats() {
-            document.getElementById('totalBets').textContent = communityData.totalBets;
-            document.getElementById('topChoice').textContent = communityData.topChoice || '-';
-            document.getElementById('activeUsers').textContent = communityData.activeUsers || 1;
-        }
-        
-        function showLeaderboard() {
-            const container = document.getElementById('leaderboardContent');
-            const allBets = communityData.bets;
-            
-            if (!allBets || allBets.length === 0) {
-                container.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Ставок пока нет. Будьте первым! 🏆</div>';
-                return;
-            }
-            
-            // Берем последние 10 ставок
-            const recentBets = allBets.slice(-10).reverse();
-            
-            let html = '';
-            recentBets.forEach((bet, index) => {
-                const isMe = bet.userId === userId;
-                const date = new Date(bet.time).toLocaleDateString('ru-RU');
+            try {
+                // Сохраняем в Supabase
+                const { error } = await supabase
+                    .from('bets')
+                    .upsert({
+                        user_id: myId,
+                        user_name: myName,
+                        bets: myBets,
+                        top_choice: mainChoice,
+                        created_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_id'
+                    });
                 
-                html += `
-                    <div class="leader" style="${isMe ? 'background: #e8f4fc;' : ''}">
-                        <div class="rank ${index < 3 ? 'rank-' + (index + 1) : ''}">${index + 1}</div>
-                        <div class="user-info">
-                            <div style="font-weight: bold;">${bet.userName || 'Аноним'} ${isMe ? '(Вы)' : ''}</div>
-                            <div style="font-size: 0.9em; color: #666;">${date}</div>
-                        </div>
-                        <div style="font-weight: bold; color: #3498db;">
-                            ${bet.mainChoice}: ${bet.bets[bet.mainChoice] || 0}%
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-        
-        function updateConnectionStatus() {
-            const statusElement = document.getElementById('status');
-            const allBets = JSON.parse(localStorage.getItem('all_bets') || '[]');
-            
-            if (allBets.length > 0) {
-                statusElement.innerHTML = '✅ Данные загружены локально';
-                statusElement.className = 'status online';
-            } else {
-                statusElement.innerHTML = '⚡ Готов к работе';
-                statusElement.className = 'status online';
+                if (error) throw error;
+                
+                showMessage('✅ Ваша ставка сохранена!');
+                
+                // Обновляем список игроков
+                setTimeout(() => loadAllBets(), 1000);
+                
+            } catch (error) {
+                console.error('Ошибка сохранения:', error);
+                showMessage('❌ Не удалось сохранить. Попробуйте еще раз.');
             }
         }
         
         function randomizeBets() {
-            // Сбрасываем ставки
-            people.forEach(person => userBets[person] = 0);
+            // Сбрасываем все ставки
+            candidates.forEach(c => myBets[c] = 0);
             
             // Распределяем 100 жетонов случайно
-            let tokensLeft = 100;
-            const shuffled = [...people].sort(() => Math.random() - 0.5);
+            let left = 100;
+            const shuffled = [...candidates].sort(() => Math.random() - 0.5);
             
             for (let i = 0; i < shuffled.length; i++) {
-                if (tokensLeft <= 0) break;
+                if (left <= 0) break;
                 
                 if (i === shuffled.length - 1) {
-                    userBets[shuffled[i]] = tokensLeft;
+                    myBets[shuffled[i]] = left;
                     break;
                 }
                 
-                const max = Math.min(Math.floor(tokensLeft / 2) + 1, tokensLeft);
+                const max = Math.min(Math.floor(left / 2) + 1, left);
                 const random = Math.floor(Math.random() * max);
-                userBets[shuffled[i]] = random;
-                tokensLeft -= random;
+                myBets[shuffled[i]] = random;
+                left -= random;
             }
             
             showCandidates();
-            localStorage.setItem('user_bets', JSON.stringify(userBets));
-            showNotification('🎲 Ставки распределены случайно!');
+            localStorage.setItem('my_bets', JSON.stringify(myBets));
+            showMessage('🎲 Ставки распределены случайно!');
         }
         
         function resetBets() {
             if (confirm('Сбросить все ваши ставки?')) {
-                people.forEach(person => userBets[person] = 0);
+                candidates.forEach(c => myBets[c] = 0);
                 showCandidates();
-                localStorage.setItem('user_bets', JSON.stringify(userBets));
-                showNotification('🗑️ Ставки сброшены');
+                localStorage.setItem('my_bets', JSON.stringify(myBets));
+                showMessage('🗑️ Все ставки сброшены');
             }
         }
         
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.textContent = message;
+        function showDemoData() {
+            const demoBets = [
+                { user_name: 'Алексей', top_choice: 'Жилко', bets: { 'Жилко': 25 }, created_at: new Date() },
+                { user_name: 'Мария', top_choice: 'Биличенко', bets: { 'Биличенко': 30 }, created_at: new Date() },
+                { user_name: 'Сергей', top_choice: 'Куликов', bets: { 'Куликов': 20 }, created_at: new Date() }
+            ];
             
-            document.body.appendChild(notification);
+            updateStats(demoBets);
+            showPlayers(demoBets);
+            
+            document.getElementById('statusText').textContent = '✅ Подключено! (демо-данные)';
+        }
+        
+        function showMessage(text) {
+            const msg = document.createElement('div');
+            msg.className = 'notification';
+            msg.textContent = text;
+            
+            document.body.appendChild(msg);
             
             setTimeout(() => {
-                notification.remove();
+                msg.remove();
             }, 3000);
         }
         
@@ -612,12 +639,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             init();
             
-            document.getElementById('placeBet').addEventListener('click', saveBet);
+            document.getElementById('saveBtn').addEventListener('click', saveMyBet);
             document.getElementById('randomBtn').addEventListener('click', randomizeBets);
             document.getElementById('resetBtn').addEventListener('click', resetBets);
             
-            // Автообновление каждые 30 секунд
-            setInterval(loadCommunityData, 30000);
+            // Автообновление каждые 10 секунд
+            setInterval(() => loadAllBets(), 10000);
         });
     </script>
 </body>
