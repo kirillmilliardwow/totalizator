@@ -1,853 +1,279 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baroque Grand Prix</title>
+    <title>✨ Магический Рандомайзер</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Marcellus+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;700;900&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
-<body class="baroque-theme">
-    <div class="gold-frame"></div>
-    
+<body>
+    <!-- Фоновые элементы -->
+    <div class="floating-elements">
+        <div class="floating-emoji">✨</div>
+        <div class="floating-emoji">🌸</div>
+        <div class="floating-emoji">🌟</div>
+        <div class="floating-emoji">🎲</div>
+        <div class="floating-emoji">💫</div>
+        <div class="floating-emoji">🌼</div>
+    </div>
+
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Конфетти -->
+    <div class="confetti-container"></div>
+
+    <!-- Контейнер приложения -->
     <div class="app-container">
-        <!-- Главное меню -->
-        <div id="main-menu" class="screen active">
-            <div class="baroque-header">
-                <h1 class="title">GRAND PRIX BAROQUE</h1>
-                <div class="ornament"></div>
-            </div>
-            
-            <div class="menu-options">
-                <button class="baroque-btn gold" onclick="startGame()">
-                    <span class="btn-text">НАЧАТЬ ГОНКУ</span>
-                    <div class="btn-ornament"></div>
-                </button>
-                <button class="baroque-btn silver" onclick="showLeaderboard()">
-                    <span class="btn-text">РЕЙТИНГ</span>
-                    <div class="btn-ornament"></div>
-                </button>
-                <button class="baroque-btn bronze" onclick="showSettings()">
-                    <span class="btn-text">ГАЛЕРЕЯ ИСКУССТВА</span>
-                    <div class="btn-ornament"></div>
-                </button>
-            </div>
-            
-            <div class="baroque-footer">
-                <div class="curls left"></div>
-                <div class="curls right"></div>
-            </div>
-        </div>
-        
-        <!-- Игровой экран -->
-        <div id="game-screen" class="screen">
-            <canvas id="gameCanvas"></canvas>
-            <div class="hud">
-                <div class="speedometer">
-                    <div class="speed-value">0 км/ч</div>
-                    <div class="rpm-bar"></div>
+        <!-- Заголовок -->
+        <header class="app-header">
+            <div class="header-ornament left"></div>
+            <h1 class="app-title">
+                <span class="title-text">Магический Рандомайзер</span>
+                <div class="title-decoration">
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
+                    <div class="sparkle"></div>
                 </div>
-                <div class="lap-counter">Круг: <span>1/3</span></div>
-                <div class="time-counter">Время: <span>00:00:00</span></div>
-            </div>
-        </div>
-        
-        <!-- Таблица рейтинга -->
-        <div id="leaderboard-screen" class="screen">
-            <div class="baroque-header">
-                <h2>ЗАЛ СЛАВЫ</h2>
-                <div class="ornament"></div>
-            </div>
-            
-            <div class="leaderboard-container">
-                <div class="table-header">
-                    <div class="rank">Ранг</div>
-                    <div class="name">Имя</div>
-                    <div class="time">Время</div>
-                    <div class="car">Карета</div>
+            </h1>
+            <div class="header-ornament right"></div>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- Вопрос -->
+            <div class="question-section">
+                <div class="input-container">
+                    <i class="fas fa-question-circle input-icon"></i>
+                    <input type="text" id="questionInput" 
+                           placeholder="Задайте свой вопрос... или нажмите на примеры ниже"
+                           maxlength="200">
+                    <button class="clear-btn" id="clearBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <div id="leaderboard-entries" class="table-body">
-                    <!-- Данные загружаются из Supabase -->
+                
+                <div class="example-questions">
+                    <button class="example-btn" data-question="Мне сегодня повезёт?">
+                        <span>🎯</span> Мне сегодня повезёт?
+                    </button>
+                    <button class="example-btn" data-question="Стоит ли начать новый проект?">
+                        <span>🚀</span> Стоит ли начать новый проект?
+                    </button>
+                    <button class="example-btn" data-question="Встречу ли я любовь?">
+                        <span>💖</span> Встречу ли я любовь?
+                    </button>
                 </div>
             </div>
-            
-            <button class="baroque-btn back-btn" onclick="showMenu()">
-                <span class="btn-text">← ВЕРНУТЬСЯ</span>
-            </button>
+
+            <!-- Рандомайзер -->
+            <div class="randomizer-section">
+                <div class="randomizer-wheel" id="randomizerWheel">
+                    <div class="wheel-inner">
+                        <div class="wheel-segment" style="--i:0; --color:#FF6B8B">
+                            <span>ДА</span>
+                        </div>
+                        <div class="wheel-segment" style="--i:1; --color:#4ECDC4">
+                            <span>НЕТ</span>
+                        </div>
+                        <div class="wheel-segment" style="--i:2; --color:#45B7D1">
+                            <span>НАВЕРНОЕ</span>
+                        </div>
+                        <div class="wheel-segment" style="--i:3; --color:#96CEB4">
+                            <span>ОБЯЗАТЕЛЬНО</span>
+                        </div>
+                        <div class="wheel-segment" style="--i:4; --color:#FFEAA7">
+                            <span>НИКАК</span>
+                        </div>
+                        <div class="wheel-segment" style="--i:5; --color:#DDA0DD">
+                            <span>СПРОСИ ПОЗЖЕ</span>
+                        </div>
+                        <div class="wheel-segment" style="--i:6; --color:#98D8C8">
+                            <span>ДАЖЕ НЕ ДУМАЙ</span>
+                        </div>
+                        <div class="wheel-segment" style="--i:7; --color:#F7DC6F">
+                            <span>ЗНАКИ ГОВОРЯТ ДА</span>
+                        </div>
+                    </div>
+                    <div class="wheel-center">
+                        <div class="wheel-pointer"></div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="spin-btn" id="spinBtn">
+                        <i class="fas fa-magic spin-icon"></i>
+                        <span>Крутить колесо</span>
+                        <div class="btn-sparkles">
+                            <div class="sparkle"></div>
+                            <div class="sparkle"></div>
+                            <div class="sparkle"></div>
+                        </div>
+                    </button>
+                    
+                    <div class="quick-answers">
+                        <button class="quick-btn" data-answer="ДА">
+                            <span class="answer-emoji">👍</span>
+                            <span class="answer-text">Да</span>
+                        </button>
+                        <button class="quick-btn" data-answer="НЕТ">
+                            <span class="answer-emoji">👎</span>
+                            <span class="answer-text">Нет</span>
+                        </button>
+                        <button class="quick-btn" data-answer="НАВЕРНОЕ">
+                            <span class="answer-emoji">🤔</span>
+                            <span class="answer-text">Наверное</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Результат -->
+            <div class="result-section" id="resultSection">
+                <div class="result-card hidden">
+                    <div class="result-header">
+                        <div class="result-emoji">🎯</div>
+                        <h3 class="result-title">Ответ Вселенной:</h3>
+                    </div>
+                    <div class="result-content">
+                        <p class="result-question" id="resultQuestion"></p>
+                        <div class="result-answer">
+                            <span class="answer-value" id="resultAnswer"></span>
+                            <div class="answer-ornament"></div>
+                        </div>
+                        <p class="result-message" id="resultMessage"></p>
+                    </div>
+                    <button class="share-btn" id="shareBtn">
+                        <i class="fas fa-share-alt"></i> Поделиться
+                    </button>
+                </div>
+            </div>
+
+            <!-- Пожелания дня -->
+            <div class="wishes-section">
+                <h2 class="section-title">
+                    <i class="fas fa-sun"></i>
+                    <span>Пожелания прекрасного дня</span>
+                </h2>
+                
+                <div class="wishes-container">
+                    <div class="wish-card">
+                        <div class="wish-emoji">🌅</div>
+                        <div class="wish-content">
+                            <p class="wish-text">Пусть утро подарит тебе улыбку солнца и лёгкость в сердце</p>
+                            <button class="copy-wish" data-wish="Пусть утро подарит тебе улыбку солнца и лёгкость в сердце">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="wish-card">
+                        <div class="wish-emoji">✨</div>
+                        <div class="wish-content">
+                            <p class="wish-text">Желаю, чтобы сегодня сбылось то, о чём ты даже не мечтал</p>
+                            <button class="copy-wish" data-wish="Желаю, чтобы сегодня сбылось то, о чём ты даже не мечтал">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="wish-card">
+                        <div class="wish-emoji">🌺</div>
+                        <div class="wish-content">
+                            <p class="wish-text">Пусть этот день будет как цветок - прекрасен и неповторим</p>
+                            <button class="copy-wish" data-wish="Пусть этот день будет как цветок - прекрасен и неповторим">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="wish-card">
+                        <div class="wish-emoji">🎶</div>
+                        <div class="wish-content">
+                            <p class="wish-text">Пусть душа поёт от счастья, а сердце танцует от радости</p>
+                            <button class="copy-wish" data-wish="Пусть душа поёт от счастья, а сердце танцует от радости">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="random-wish-btn" id="randomWishBtn">
+                    <i class="fas fa-random"></i>
+                    <span>Случайное пожелание</span>
+                </button>
+            </div>
+
+            <!-- История -->
+            <div class="history-section">
+                <h3 class="section-title">
+                    <i class="fas fa-history"></i>
+                    <span>История ответов</span>
+                </h3>
+                <div class="history-list" id="historyList">
+                    <!-- История будет добавляться здесь -->
+                </div>
+                <button class="clear-history" id="clearHistory">
+                    <i class="fas fa-trash-alt"></i> Очистить историю
+                </button>
+            </div>
+        </main>
+
+        <!-- Подвал -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="theme-switch">
+                    <label class="switch">
+                        <input type="checkbox" id="themeSwitch">
+                        <span class="slider round">
+                            <i class="fas fa-sun day-icon"></i>
+                            <i class="fas fa-moon night-icon"></i>
+                        </span>
+                    </label>
+                    <span class="theme-label">Тема</span>
+                </div>
+                
+                <div class="footer-info">
+                    <p>Сделано с ❤️ и магией</p>
+                    <div class="social-links">
+                        <button class="social-btn" onclick="shareApp()">
+                            <i class="fas fa-share"></i>
+                        </button>
+                        <button class="social-btn" onclick="rateApp()">
+                            <i class="fas fa-star"></i>
+                        </button>
+                        <button class="social-btn" onclick="showAbout()">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="modal-overlay hidden" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle"></h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
-    
-    <!-- Анимированные элементы барокко -->
-    <div class="floating-ornaments">
-        <div class="ornament cherub"></div>
-        <div class="ornament scroll"></div>
-        <div class="ornament fleur"></div>
-    </div>
-    
-    <script src="supabase-client.js"></script>
-    <script src="game.js"></script>
-    <script src="telegram-app.js"></script>
+
+    <!-- Аудио элементы -->
+    <audio id="spinSound" src="assets/sounds/spin.mp3" preload="auto"></audio>
+    <audio id="resultSound" src="assets/sounds/result.mp3" preload="auto"></audio>
+    <audio id="clickSound" src="assets/sounds/click.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+    <script src="particles.js"></script>
+    <script src="sounds.js"></script>
+    <script src="telegram.js"></script>
 </body>
 </html>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --gold: #D4AF37;
-    --dark-gold: #B8860B;
-    --maroon: #800000;
-    --dark-red: #4A0C0C;
-    --cream: #F5F5DC;
-    --shadow: rgba(0, 0, 0, 0.7);
-}
-
-body.baroque-theme {
-    background: linear-gradient(135deg, var(--dark-red), #2c0b0b);
-    font-family: 'Cinzel', serif;
-    color: var(--cream);
-    min-height: 100vh;
-    overflow: hidden;
-    position: relative;
-}
-
-/* Золотая рамка */
-.gold-frame {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    border: 3px solid var(--gold);
-    border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cpath d='M20,20 L80,20 L80,80 L20,80 Z' fill='none' stroke='%23D4AF37' stroke-width='3' stroke-dasharray='10,5'/%3E%3C/svg%3E") 30 round;
-    pointer-events: none;
-    z-index: 1000;
-}
-
-.app-container {
-    max-width: 100%;
-    height: 100vh;
-    position: relative;
-    padding: 20px;
-}
-
-.screen {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-}
-
-.screen.active {
-    display: block;
-    animation: fadeIn 1s ease-out;
-}
-
-/* Анимации */
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(5deg); }
-}
-
-@keyframes glow {
-    0%, 100% { text-shadow: 0 0 10px var(--gold); }
-    50% { text-shadow: 0 0 20px var(--gold), 0 0 30px var(--gold); }
-}
-
-/* Заголовки */
-.baroque-header {
-    text-align: center;
-    margin: 30px 0;
-    position: relative;
-}
-
-.title {
-    font-size: 2.5em;
-    font-weight: 900;
-    color: var(--gold);
-    text-shadow: 3px 3px 0 var(--shadow);
-    letter-spacing: 3px;
-    animation: glow 3s infinite;
-    background: linear-gradient(to right, var(--gold), #FFF);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.ornament {
-    height: 20px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20'%3E%3Cpath d='M0,10 Q50,0 100,10 T200,10' stroke='%23D4AF37' fill='none' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
-    margin: 20px auto;
-    width: 80%;
-}
-
-/* Кнопки */
-.menu-options {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 25px;
-    margin-top: 50px;
-}
-
-.baroque-btn {
-    position: relative;
-    padding: 20px 40px;
-    font-family: 'Marcellus SC', serif;
-    font-size: 1.4em;
-    background: linear-gradient(45deg, var(--maroon), var(--dark-red));
-    border: 3px solid var(--gold);
-    color: var(--cream);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 300px;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px var(--shadow);
-}
-
-.baroque-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px var(--shadow);
-    background: linear-gradient(45deg, #9b1a1a, var(--maroon));
-}
-
-.baroque-btn.gold {
-    background: linear-gradient(45deg, var(--dark-gold), var(--gold));
-    color: var(--dark-red);
-}
-
-.baroque-btn.gold:hover {
-    background: linear-gradient(45deg, var(--gold), #FFD700);
-}
-
-.btn-text {
-    position: relative;
-    z-index: 2;
-    letter-spacing: 1px;
-}
-
-.btn-ornament {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20,20 Q50,5 80,20 Q95,50 80,80 Q50,95 20,80 Q5,50 20,20' fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='2'/%3E%3C/svg%3E");
-    opacity: 0.3;
-}
-
-/* Игровой экран */
-#gameCanvas {
-    width: 100%;
-    height: 70%;
-    border: 2px solid var(--gold);
-    border-radius: 5px;
-    background: #111;
-    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
-}
-
-.hud {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(74, 12, 12, 0.8);
-    border: 2px solid var(--gold);
-    border-radius: 10px;
-}
-
-.speedometer {
-    text-align: center;
-    font-size: 1.5em;
-    color: var(--gold);
-}
-
-/* Таблица лидеров */
-.leaderboard-container {
-    max-width: 90%;
-    margin: 30px auto;
-    background: rgba(0, 0, 0, 0.7);
-    border: 2px solid var(--gold);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.table-header {
-    display: grid;
-    grid-template-columns: 1fr 3fr 2fr 2fr;
-    background: var(--maroon);
-    padding: 15px;
-    font-weight: bold;
-    border-bottom: 2px solid var(--gold);
-}
-
-.table-body {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.leaderboard-entry {
-    display: grid;
-    grid-template-columns: 1fr 3fr 2fr 2fr;
-    padding: 12px 15px;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-    animation: slideIn 0.5s ease-out;
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-.leaderboard-entry:nth-child(odd) {
-    background: rgba(128, 0, 0, 0.2);
-}
-
-.leaderboard-entry.gold { background: linear-gradient(90deg, rgba(212, 175, 55, 0.1), transparent); }
-.leaderboard-entry.silver { background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), transparent); }
-.leaderboard-entry.bronze { background: linear-gradient(90deg, rgba(205, 127, 50, 0.1), transparent); }
-
-/* Плавающие орнаменты */
-.floating-ornaments .ornament {
-    position: absolute;
-    opacity: 0.1;
-    pointer-events: none;
-}
-
-.cherub {
-    top: 10%;
-    left: 5%;
-    width: 100px;
-    height: 100px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20 Q60,10 70,20 Q80,30 75,40 Q70,50 60,55 Q50,60 40,55 Q30,50 25,40 Q20,30 30,20 Q40,10 50,20' fill='%23D4AF37'/%3E%3C/svg%3E");
-    animation: float 8s infinite ease-in-out;
-}
-
-.scroll {
-    bottom: 20%;
-    right: 10%;
-    width: 80px;
-    height: 80px;
-    animation: float 10s infinite ease-in-out reverse;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .title { font-size: 1.8em; }
-    .baroque-btn { min-width: 250px; padding: 15px 30px; }
-    .table-header { grid-template-columns: 0.5fr 2fr 1fr 1fr; }
-}
-class BaroqueRacingGame {
-    constructor() {
-        this.canvas = document.getElementById('gameCanvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.gameRunning = false;
-        this.startTime = 0;
-        this.currentLap = 1;
-        this.totalLaps = 3;
-        this.speed = 0;
-        this.maxSpeed = 300;
-        this.playerCar = {
-            x: 100,
-            y: 300,
-            width: 40,
-            height: 80,
-            color: '#D4AF37',
-            name: 'Royal Carriage'
-        };
-        this.track = [];
-        this.opponents = [];
-        this.init();
-    }
-
-    init() {
-        // Устанавливаем размеры canvas
-        this.canvas.width = this.canvas.offsetWidth;
-        this.canvas.height = this.canvas.offsetHeight;
-        
-        // Создаем трассу
-        this.createTrack();
-        
-        // Создаем противников
-        this.createOpponents();
-        
-        // Настройки управления
-        this.setupControls();
-        
-        // Запускаем игровой цикл
-        requestAnimationFrame(this.gameLoop.bind(this));
-    }
-
-    createTrack() {
-        // Создаем извилистую трассу в стиле барокко
-        const trackWidth = 300;
-        const centerX = this.canvas.width / 2;
-        
-        for (let i = 0; i < 1000; i += 20) {
-            this.track.push({
-                x: centerX + Math.sin(i * 0.02) * 100 + Math.cos(i * 0.01) * 50,
-                y: i,
-                width: trackWidth + Math.sin(i * 0.03) * 40
-            });
-        }
-    }
-
-    createOpponents() {
-        const carNames = [
-            'Golden Chariot', 'Silver Stallion', 'Bronze Charger',
-            'Marble Steed', 'Velvet Carriage', 'Crystal Coach'
-        ];
-        
-        for (let i = 0; i < 5; i++) {
-            this.opponents.push({
-                x: this.canvas.width / 2 + 100 * Math.cos(i),
-                y: 200 + i * 150,
-                width: 40,
-                height: 80,
-                color: i === 0 ? '#C0C0C0' : i === 1 ? '#CD7F32' : '#800000',
-                name: carNames[i],
-                speed: 2 + Math.random() * 3
-            });
-        }
-    }
-
-    setupControls() {
-        let keys = {};
-        
-        window.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
-            this.handleInput(keys);
-        });
-        
-        window.addEventListener('keyup', (e) => {
-            keys[e.key] = false;
-        });
-        
-        // Для мобильных устройств
-        this.canvas.addEventListener('touchstart', (e) => {
-            const touchX = e.touches[0].clientX;
-            if (touchX < this.canvas.width / 2) {
-                this.playerCar.x -= 20;
-            } else {
-                this.playerCar.x += 20;
-            }
-        });
-    }
-
-    handleInput(keys) {
-        if (keys['ArrowLeft'] || keys['a']) {
-            this.playerCar.x -= 10;
-            this.speed = Math.max(this.speed - 2, 0);
-        }
-        if (keys['ArrowRight'] || keys['d']) {
-            this.playerCar.x += 10;
-            this.speed = Math.max(this.speed - 2, 0);
-        }
-        if (keys['ArrowUp'] || keys['w']) {
-            this.speed = Math.min(this.speed + 5, this.maxSpeed);
-        }
-        if (keys['ArrowDown'] || keys['s']) {
-            this.speed = Math.max(this.speed - 5, 0);
-        }
-        
-        // Ограничения движения по трассе
-        const trackSegment = this.getCurrentTrackSegment();
-        const trackLeft = trackSegment.x - trackSegment.width / 2;
-        const trackRight = trackSegment.x + trackSegment.width / 2;
-        
-        this.playerCar.x = Math.max(trackLeft + 10, 
-            Math.min(trackRight - this.playerCar.width - 10, this.playerCar.x));
-    }
-
-    getCurrentTrackSegment() {
-        const playerY = this.playerCar.y % 1000;
-        const segmentIndex = Math.floor(playerY / 20);
-        return this.track[segmentIndex] || this.track[0];
-    }
-
-    startRace() {
-        this.gameRunning = true;
-        this.startTime = Date.now();
-        this.currentLap = 1;
-        this.speed = 0;
-        document.getElementById('game-screen').classList.add('active');
-        document.getElementById('main-menu').classList.remove('active');
-    }
-
-    gameLoop() {
-        if (!this.gameRunning) {
-            requestAnimationFrame(this.gameLoop.bind(this));
-            return;
-        }
-
-        this.update();
-        this.render();
-        this.updateHUD();
-        
-        requestAnimationFrame(this.gameLoop.bind(this));
-    }
-
-    update() {
-        // Движение игрока
-        if (this.speed > 0) {
-            this.playerCar.y -= this.speed * 0.1;
-            
-            // Проверка кругов
-            if (this.playerCar.y < -1000) {
-                this.playerCar.y += 1000;
-                this.currentLap++;
-                
-                if (this.currentLap > this.totalLaps) {
-                    this.finishRace();
-                }
-            }
-        }
-        
-        // Движение противников
-        this.opponents.forEach(opponent => {
-            opponent.y -= opponent.speed;
-            if (opponent.y < -200) {
-                opponent.y = this.canvas.height + Math.random() * 300;
-            }
-            
-            // Случайные движения
-            opponent.x += (Math.random() - 0.5) * 3;
-        });
-        
-        // Плавное снижение скорости
-        if (this.speed > 0) {
-            this.speed *= 0.98;
-        }
-    }
-
-    render() {
-        const ctx = this.ctx;
-        
-        // Очистка экрана
-        ctx.fillStyle = '#1a0a0a';
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Рендер трассы
-        this.renderTrack(ctx);
-        
-        // Рендер противников
-        this.opponents.forEach(opponent => this.renderCar(ctx, opponent));
-        
-        // Рендер игрока
-        this.renderCar(ctx, this.playerCar);
-        
-        // Эффекты скорости
-        if (this.speed > 150) {
-            this.renderSpeedEffect(ctx);
-        }
-    }
-
-    renderTrack(ctx) {
-        ctx.save();
-        
-        this.track.forEach((segment, index) => {
-            const yPos = (segment.y - this.playerCar.y) % 1000 + this.canvas.height / 2;
-            
-            if (yPos > -100 && yPos < this.canvas.height + 100) {
-                // Дорога
-                ctx.fillStyle = '#333';
-                ctx.fillRect(
-                    segment.x - segment.width / 2,
-                    yPos - 10,
-                    segment.width,
-                    20
-                );
-                
-                // Разделительная линия
-                if (index % 3 === 0) {
-                    ctx.fillStyle = '#D4AF37';
-                    ctx.fillRect(
-                        segment.x - 5,
-                        yPos - 5,
-                        10,
-                        10
-                    );
-                }
-                
-                // Бордюры
-                ctx.strokeStyle = '#D4AF37';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.moveTo(segment.x - segment.width / 2, yPos);
-                ctx.lineTo(segment.x - segment.width / 2 + 50, yPos);
-                ctx.stroke();
-                
-                ctx.beginPath();
-                ctx.moveTo(segment.x + segment.width / 2, yPos);
-                ctx.lineTo(segment.x + segment.width / 2 - 50, yPos);
-                ctx.stroke();
-            }
-        });
-        
-        ctx.restore();
-    }
-
-    renderCar(ctx, car) {
-        const screenY = this.canvas.height / 2;
-        
-        ctx.save();
-        ctx.translate(car.x, screenY);
-        
-        // Корпус машины
-        ctx.fillStyle = car.color;
-        ctx.fillRect(-car.width / 2, -car.height / 2, car.width, car.height);
-        
-        // Украшения в стиле барокко
-        ctx.strokeStyle = '#FFF';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(-car.width / 2 + 5, -car.height / 2 + 5, 
-                      car.width - 10, car.height - 10);
-        
-        // Колеса
-        ctx.fillStyle = '#222';
-        ctx.fillRect(-car.width / 2 - 5, -car.height / 2 + 10, 5, 20);
-        ctx.fillRect(-car.width / 2 - 5, car.height / 2 - 30, 5, 20);
-        ctx.fillRect(car.width / 2, -car.height / 2 + 10, 5, 20);
-        ctx.fillRect(car.width / 2, car.height / 2 - 30, 5, 20);
-        
-        // Имя машины
-        ctx.fillStyle = '#FFF';
-        ctx.font = '10px Cinzel';
-        ctx.textAlign = 'center';
-        ctx.fillText(car.name, 0, -car.height / 2 - 10);
-        
-        ctx.restore();
-    }
-
-    renderSpeedEffect(ctx) {
-        ctx.save();
-        ctx.globalAlpha = 0.3;
-        
-        // Линии скорости
-        for (let i = 0; i < 20; i++) {
-            const x = Math.random() * this.canvas.width;
-            const length = 50 + Math.random() * 100;
-            
-            ctx.strokeStyle = '#D4AF37';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(x, this.canvas.height);
-            ctx.lineTo(x + (Math.random() - 0.5) * 100, 
-                      this.canvas.height - length);
-            ctx.stroke();
-        }
-        
-        ctx.restore();
-    }
-
-    updateHUD() {
-        document.querySelector('.speed-value').textContent = 
-            `${Math.round(this.speed)} км/ч`;
-        document.querySelector('.lap-counter span').textContent = 
-            `${this.currentLap}/${this.totalLaps}`;
-        
-        if (this.gameRunning) {
-            const elapsed = Date.now() - this.startTime;
-            const timeStr = new Date(elapsed).toISOString().substr(11, 8);
-            document.querySelector('.time-counter span').textContent = timeStr;
-        }
-    }
-
-    async finishRace() {
-        this.gameRunning = false;
-        const finishTime = Date.now() - this.startTime;
-        
-        // Сохраняем результат в Supabase
-        await saveRaceResult({
-            playerName: window.Telegram.WebApp.initDataUnsafe.user?.first_name || 'Гость',
-            time: finishTime,
-            car: this.playerCar.name,
-            date: new Date().toISOString()
-        });
-        
-        // Показываем результат
-        alert(`Гонка завершена!\nВремя: ${(finishTime/1000).toFixed(2)} сек`);
-        showLeaderboard();
-    }
-}
-
-// Глобальные функции для кнопок
-let game;
-
-function startGame() {
-    if (!game) {
-        game = new BaroqueRacingGame();
-    }
-    game.startRace();
-}
-
-function showLeaderboard() {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('leaderboard-screen').classList.add('active');
-    loadLeaderboard();
-}
-
-function showMenu() {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('main-menu').classList.add('active');
-}
-
-// Инициализация при загрузке
-window.addEventListener('load', () => {
-    game = new BaroqueRacingGame();
-});
-            // Конфигурация Supabase
-const SUPABASE_URL = 'https://your-project.supabase.co';
-const SUPABASE_ANON_KEY = 'your-anon-key';
-
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Функции для работы с данными
-async function saveRaceResult(result) {
-    try {
-        const { data, error } = await supabaseClient
-            .from('race_results')
-            .insert([{
-                player_name: result.playerName,
-                time_ms: result.time,
-                car_model: result.car,
-                race_date: result.date,
-                telegram_id: window.Telegram.WebApp.initDataUnsafe.user?.id || null
-            }])
-            .select();
-            
-        if (error) throw error;
-        return data;
-    } catch (error) {
-        console.error('Error saving race result:', error);
-        // Локальное сохранение на случай недоступности Supabase
-        saveResultLocally(result);
-    }
-}
-
-async function loadLeaderboard() {
-    try {
-        const { data, error } = await supabaseClient
-            .from('race_results')
-            .select('*')
-            .order('time_ms', { ascending: true })
-            .limit(20);
-            
-        if (error) throw error;
-        
-        displayLeaderboard(data);
-        return data;
-    } catch (error) {
-        console.error('Error loading leaderboard:', error);
-        // Загружаем локальные данные
-        const localResults = getLocalResults();
-        displayLeaderboard(localResults);
-    }
-}
-
-function displayLeaderboard(results) {
-    const container = document.getElementById('leaderboard-entries');
-    container.innerHTML = '';
-    
-    results.forEach((result, index) => {
-        const entry = document.createElement('div');
-        entry.className = `leaderboard-entry ${index < 3 ? ['gold', 'silver', 'bronze'][index] : ''}`;
-        
-        const time = new Date(result.time_ms);
-        const timeStr = `${time.getUTCHours().toString().padStart(2, '0')}:` +
-                       `${time.getUTCMinutes().toString().padStart(2, '0')}:` +
-                       `${time.getUTCSeconds().toString().padStart(2, '0')}.` +
-                       `${time.getUTCMilliseconds().toString().padStart(3, '0')}`;
-        
-        entry.innerHTML = `
-            <div class="rank">${index + 1}</div>
-            <div class="name">${result.player_name}</div>
-            <div class="time">${timeStr}</div>
-            <div class="car">${result.car_model}</div>
-        `;
-        
-        container.appendChild(entry);
-    });
-}
-
-// Локальное хранилище на случай отсутствия интернета
-function saveResultLocally(result) {
-    const results = JSON.parse(localStorage.getItem('baroque_race_results') || '[]');
-    results.push({
-        ...result,
-        id: Date.now()
-    });
-    
-    // Сохраняем только 50 последних результатов
-    if (results.length > 50) {
-        results.splice(0, results.length - 50);
-    }
-    
-    localStorage.setItem('baroque_race_results', JSON.stringify(results));
-}
-
-function getLocalResults() {
-    const results = JSON.parse(localStorage.getItem('baroque_race_results') || '[]');
-    return results.sort((a, b) => a.time - b.time).slice(0, 20);
-}
-            // Инициализация Telegram Web App
-window.Telegram.WebApp.ready();
-window.Telegram.WebApp.expand();
-
-// Устанавливаем тему Telegram
-function setupTelegramTheme() {
-    const theme = window.Telegram.WebApp.colorScheme;
-    
-    if (theme === 'dark') {
-        document.body.classList.add('dark-theme');
-    }
-    
-    // Используем данные пользователя Telegram
-    const user = window.Telegram.WebApp.initDataUnsafe.user;
-    if (user) {
-        console.log('Telegram user:', user);
-        // Можно использовать user.first_name, user.username и т.д.
-    }
-}
-
-// Отправка данных в Telegram
-function shareResult(result) {
-    const shareText = `🏎️ Я только что прошел гонку в Baroque Grand Prix за ${(result.time/1000).toFixed(2)} секунд!`;
-    
-    window.Telegram.WebApp.shareText(shareText, (shared) => {
-        if (shared) {
-            console.log('Результат поделился');
-        }
-    });
-}
-
-// Инициализация при загрузке
-document.addEventListener('DOMContentLoaded', () => {
-    setupTelegramTheme();
-    
-    // Добавляем кнопку поделиться в таблицу лидеров
-    const shareBtn = document.createElement('button');
-    shareBtn.className = 'baroque-btn gold';
-    shareBtn.innerHTML = '<span class="btn-text">ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ</span>';
-    shareBtn.onclick = () => {
-        const bestResult = getLocalResults()[0];
-        if (bestResult) {
-            shareResult(bestResult);
-        }
-    };
-    
-    document.querySelector('.leaderboard-container').appendChild(shareBtn);
-});
-            
